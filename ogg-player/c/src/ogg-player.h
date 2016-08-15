@@ -1,6 +1,14 @@
 #ifndef __OGG_PLAYER_H
 #define __OGG_PLAYER_H
 
+#include "wrap-ogg.h"
+
+typedef struct
+{
+    ogg_stream_state stream;
+    int              serial_num;
+} logical_stream_t;
+
 void
 ogg_init();
 

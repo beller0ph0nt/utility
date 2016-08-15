@@ -40,12 +40,16 @@ main(int argc, char** argv)
         - декодирование заголовков
             - получить пакет
             -
+        Необходимо диамически формировать все логические потоки
+        в зависимости от серийного номера считываемой страницы.
      **/
 
+     ogg_pull_packet_from_logical_stream();
 
-    theora_decode_identification_header_packet();
-    theora_decode_comment_header_packet();
-    theora_decode_setup_header_packet();
+
+//    theora_decode_identification_header_packet();
+//    theora_decode_comment_header_packet();
+//    theora_decode_setup_header_packet();
 
     fclose(fd);
 
