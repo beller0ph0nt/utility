@@ -7,7 +7,7 @@ CFLAGS = -Wall -DDEBUG
 CC = $(CROSS_COMPILE)gcc
 LD = $(CROSS_COMPILE)ld
 
-LIB = -logg -ltheora
+LIB = -logg -ltheora -lvorbis
 
 .PHONY: all
 
