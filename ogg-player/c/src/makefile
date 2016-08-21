@@ -1,6 +1,7 @@
 PLAYER_OBJ = ogg-player.o \
              wrap-ogg.o \
-             wrap-theora.o
+             wrap-theora.o \
+             ogg-skeleton.o
 
 CFLAGS = -Wall -DDEBUG
 
@@ -21,6 +22,8 @@ ogg-player.o: ogg-player.c
 wrap-ogg.o: wrap-ogg.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 wrap-theora.o: wrap-theora.c
+	$(CC) -c $(CFLAGS) -o $@ $^
+ogg-skeleton.o: ogg-skeleton.c
 	$(CC) -c $(CFLAGS) -o $@ $^
 
 clear:

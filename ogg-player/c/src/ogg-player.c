@@ -8,20 +8,24 @@
 #include "wrap-ogg.h"
 #include "ogg-player.h"
 #include "wrap-theora.h"
+#include "ogg-skeleton.h"
 
 #define PHYSICAL_STREAM_READ_BLOCK_SIZE     8192
 
 FILE* fd = NULL;
 
-//ogg_sync_state   sync_state_;
+
+
 ogg_sync_state   physical_stream_;
+
+ogg_logical_stream_pool_t logical_pool_;
+
+//ogg_logical_stream_t* logical_stream_pool_ = NULL;
+//unsigned int          logical_stream_pool_size_ = 0;
+
 ogg_stream_state theora_stream_state_;
-
-ogg_logical_stream_t* logical_stream_ = NULL;
-unsigned int          logical_stream_count_ = 0;
-
-ogg_page         page_;
-ogg_packet       packet_;
+//ogg_page         page_;
+//ogg_packet       packet_;
 
 theora_comment   theora_comment_;
 theora_info      theora_info_;
@@ -38,30 +42,37 @@ main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    fd = fopen(argv[1], "r");
+    ogg_player_t player;
+
+    player.fd = fopen(argv[1], "r");
 
     ogg_init();
+    ogg_sync_init(&player.physical_stream);
+
     theora_init();
 
-    while (!feof(fd))
+    ogg_page     page;
+    do
     {
-        ogg_pull_page_from_physical_stream(&physical_stream_, &page_);
-        ogg_push_page_into_logical_stream(&page_);
-//        ogg_pull_packet_from_logical_stream();
+        ogg_pull_page_from_physical_stream(&player, &page);
+        ogg_push_page_into_logical_stream_pool(&logical_pool_, &page);
     }
+    while (ogg_page_bos(&page));
 
     TRACE_INFO("********LOGICAL STREAMS*******");
     int i;
-    for (i = 0; i < logical_stream_count_; i++)
+    for (i = 0; i < player.logical_pool.size; i++)
     {
-        ogg_pull_packet_from_logical_stream(&logical_stream_[i].stream, &packet_);
-        if (theora_packet_isheader(&packet_))
-            TRACE_INFO("index: %d serial: %d type: THEORA", i, logical_stream_[i].serial_num);
-        else if (vorbis_synthesis_idheader(&packet_))
-            TRACE_INFO("index: %d serial: %d type: VORBIS", i, logical_stream_[i].serial_num);
+        ogg_packet packet;
+        ogg_pull_packet_from_logical_stream(&player, &player.logical_pool.stream[i].state, &packet);
+        if (is_skeleton_packet(&packet))
+            TRACE_INFO("index: %d serial: %d type: SKELETON", i, player.logical_pool.stream[i].serial_num);
+        else if (theora_packet_isheader(&packet))
+            TRACE_INFO("index: %d serial: %d type: THEORA", i, player.logical_pool.stream[i].serial_num);
+        else if (vorbis_synthesis_idheader(&packet))
+            TRACE_INFO("index: %d serial: %d type: VORBIS", i, player.logical_pool.stream[i].serial_num);
         else
-            TRACE_INFO("index: %d serial: %d type: UNKNOWN", i, logical_stream_[i].serial_num);
-
+            TRACE_INFO("index: %d serial: %d type: UNKNOWN", i, player.logical_pool.stream[i].serial_num);
     }
     TRACE_INFO("******************************");
 
@@ -71,7 +82,7 @@ main(int argc, char** argv)
 //    theora_decode_comment_header_packet();
 //    theora_decode_setup_header_packet();
 
-    fclose(fd);
+    fclose(player.fd);
 
     return EXIT_SUCCESS;
 }
@@ -86,84 +97,72 @@ void
 ogg_init()
 {
     TRACE_DEBUG("");
-//    memset(&sync_state_, 0x00, sizeof(ogg_sync_state));
 //    memset(&physical_stream_, 0x00, sizeof(ogg_sync_state));
 //    memset(&theora_stream_state_, 0x00, sizeof(ogg_stream_state));
 //    memset(&page_, 0x00, sizeof(ogg_page));
 //    memset(&packet_, 0x00, sizeof(ogg_packet));
 
-//    ogg_sync_init(&sync_state_);
-    ogg_sync_init(&physical_stream_);
+//    ogg_sync_init(&physical_stream_);
 }
 
 void
-ogg_read_block_into_physical_stream(ogg_sync_state* physical_stream)
+ogg_read_block_into_physical_stream(ogg_player_t* player)
 {
-    char* buffer = w_ogg_sync_buffer(physical_stream, PHYSICAL_STREAM_READ_BLOCK_SIZE);
-    size_t bytes = fread(buffer, 1, PHYSICAL_STREAM_READ_BLOCK_SIZE, fd);
+    char* buffer = w_ogg_sync_buffer(&player->physical_stream, PHYSICAL_STREAM_READ_BLOCK_SIZE);
+    size_t bytes = fread(buffer, 1, PHYSICAL_STREAM_READ_BLOCK_SIZE, player->fd);
 //    TRACE_DEBUG("read %d byte(s)", bytes);
-    w_ogg_sync_wrote(physical_stream, bytes);
+    w_ogg_sync_wrote(&player->physical_stream, bytes);
 }
 
 void
-ogg_pull_page_from_physical_stream(ogg_sync_state* physical_stream,
-                                   ogg_page*       page)
+ogg_pull_page_from_physical_stream(ogg_player_t* player,
+                                   ogg_page*     page)
 {
-    while (w_ogg_sync_pageout(physical_stream, page) != 1)
-        ogg_read_block_into_physical_stream(physical_stream);
+    while (w_ogg_sync_pageout(&player->physical_stream, page) != 1)
+        ogg_read_block_into_physical_stream(player);
 
 //    TRACE_DEBUG("page  body_len: %ld  header_len: %ld", page.body_len, page.header_len);
 }
 
-
-
-
-//void
-//ogg_init_logical_stream()
-//{
-//    ogg_pull_page_from_physical_stream();
-//    int serial_no = ogg_page_serialno(&page_);
-//
-//    TRACE_DEBUG("page serial number: %d", serial_no);
-//
-//    w_ogg_stream_init(&theora_stream_state_, serial_no);
-//    ogg_push_page_into_logical_stream();
-//}
-
-
-
 void
-ogg_push_page_into_logical_stream(ogg_page* page)
+ogg_init_stream_in_logical_stream_pool(ogg_logical_stream_pool_t* pool,
+                                       ogg_page*                  page,
+                                       int                        page_serialno)
 {
-//    TRACE_DEBUG("");
-
-    int i;
-    int serial_num = ogg_page_serialno(page);
-    for (i = 0; i < logical_stream_count_; i++)
-    {
-        if (logical_stream_[i].serial_num == serial_num)
-        {
-            w_ogg_stream_pagein(&logical_stream_[i].stream, page);
-//            TRACE_DEBUG("add page to logical stream serial: %d", serial_num);
-            return;
-        }
-    }
-
-    i = logical_stream_count_++;
-    logical_stream_ = realloc(logical_stream_, sizeof(ogg_logical_stream_t) * logical_stream_count_);
-    logical_stream_[i].serial_num = serial_num;
-    w_ogg_stream_init(&logical_stream_[i].stream, serial_num);
-    w_ogg_stream_pagein(&logical_stream_[i].stream, page);
+    int i = pool->size++;
+    pool->stream = realloc(pool->stream, sizeof(ogg_logical_stream_t) * pool->size);
+    pool->stream[i].serial_num = page_serialno;
+    w_ogg_stream_init(&pool->stream[i].state, page_serialno);
+    w_ogg_stream_pagein(&pool->stream[i].state, page);
 }
 
 void
-ogg_pull_packet_from_logical_stream(ogg_stream_state* logical_stream, ogg_packet* packet)
+ogg_push_page_into_logical_stream_pool(ogg_logical_stream_pool_t* pool,
+                                       ogg_page*                  page)
 {
-//    TRACE_DEBUG("");
+    int serial_num = ogg_page_serialno(page);
+
+    int i;
+    for (i = 0; i < pool->size; i++)
+        if (pool->stream[i].serial_num == serial_num)
+        {
+            w_ogg_stream_pagein(&pool->stream[i].state, page);
+            return;
+        }
+
+    ogg_init_stream_in_logical_stream_pool(pool, page, serial_num);
+}
+
+void
+ogg_pull_packet_from_logical_stream(ogg_player_t*     player,
+                                    ogg_stream_state* logical_stream,
+                                    ogg_packet*       packet)
+{
+    ogg_page page;
     while (w_ogg_stream_packetout(logical_stream, packet) != 1)
     {
-        ogg_pull_page_from_physical_stream(&physical_stream_, &page_);
-        ogg_push_page_into_logical_stream(&page_);
+        ogg_pull_page_from_physical_stream(player, &page);
+        ogg_push_page_into_logical_stream_pool(&player->logical_pool ,&page);
     }
 }
 
@@ -200,15 +199,15 @@ void
 theora_decode_header_packet()
 {
     TRACE_DEBUG("");
-    while (1)
-    {
+//    while (1)
+//    {
 
 //    ogg_pull_packet_from_logical_stream();
-    int ret = w_theora_decode_header(&theora_info_, &theora_comment_, &packet_);
-    if (ret == 0)
-        return;
+//    int ret = w_theora_decode_header(&theora_info_, &theora_comment_, &packet_);
+//    if (ret == 0)
+//        return;
 
-    }
+//    }
 }
 
 void
