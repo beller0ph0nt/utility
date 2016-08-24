@@ -20,13 +20,13 @@ typedef struct
     FILE*                     fd;
     ogg_sync_state            physical_stream;
     ogg_logical_stream_pool_t logical_pool;
-    ogg_stream_state*         skeleton_logical_stream;
-    ogg_stream_state*         theora_logical_stream;
-    ogg_stream_state*         vorbis_logical_stream;
+    ogg_logical_stream_t*     skeleton_logical_stream;
+    ogg_logical_stream_t*     theora_logical_stream;
+    ogg_logical_stream_t*     vorbis_logical_stream;
 } ogg_player_t;
 
-void
-ogg_init();
+//void
+//ogg_init();
 
 #define PHYSICAL_STREAM_READ_SUCCESS    0
 #define PHYSICAL_STREAM_END             1

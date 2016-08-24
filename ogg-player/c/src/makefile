@@ -3,7 +3,7 @@ PLAYER_OBJ = ogg-player.o \
              wrap-theora.o \
              ogg-skeleton.o
 
-CFLAGS = -Wall -DDEBUG
+CFLAGS = -Wall -g -DDEBUG
 
 CC = $(CROSS_COMPILE)gcc
 LD = $(CROSS_COMPILE)ld

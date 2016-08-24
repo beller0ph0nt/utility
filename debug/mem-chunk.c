@@ -3,7 +3,7 @@
 size_t
 get_chunk_size()
 {
-    2 * sizeof(size_t)
+    return 2 * sizeof(size_t);
 }
 
 void*
