@@ -25,6 +25,12 @@ typedef struct
     skeleton_time_t presentation_time;
     skeleton_time_t base_time;
     char            utc[20];
+} skeleton_fishead_t;
+
+typedef union
+{
+    skeleton_fishead_t fishead;
+    char               raw[sizeof(skeleton_fishead_t)];
 } skeleton_head_t;
 
 int

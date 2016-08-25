@@ -12,8 +12,6 @@
 
 #define PHYSICAL_STREAM_READ_BLOCK_SIZE     8192
 
-ogg_stream_state theora_stream_state_;
-
 theora_comment   theora_comment_;
 theora_info      theora_info_;
 theora_state     theora_state_;
@@ -30,16 +28,19 @@ main(int argc, char** argv)
     }
 
     ogg_player_t player;
-    memset(&player, 0, sizeof(ogg_player_t));
+    player_init(&player);
+
 
     player.fd = fopen(argv[1], "r");
 
 //    ogg_init(&player);
-    ogg_sync_init(&player.physical_stream);
 
-    theora_init();
 
-    ogg_page     page;
+//    theora_init();
+
+    ogg_page   page;
+    ogg_packet packet;
+
     do
     {
         ogg_pull_page_from_physical_stream(&player, &page);
@@ -51,22 +52,22 @@ main(int argc, char** argv)
     int i;
     for (i = 0; i < player.logical_pool.size; i++)
     {
-        ogg_packet packet;
         ogg_pull_packet_from_logical_stream(&player, &player.logical_pool.stream[i].state, &packet);
         if (is_skeleton_packet(&packet))
         {
             TRACE_INFO("index: %d serial: %d type: SKELETON", i, player.logical_pool.stream[i].serial_num);
-            player.skeleton_logical_stream = player.logical_pool[i].stream;
+            player.skeleton_logical_stream = &player.logical_pool.stream[i];
         }
         else if (theora_packet_isheader(&packet))
         {
             TRACE_INFO("index: %d serial: %d type: THEORA", i, player.logical_pool.stream[i].serial_num);
-            player.theora_logical_stream = player.logical_pool[i].stream;
+            player.theora.logical_stream = &player.logical_pool.stream[i];
+            theora_decode_identification_header_packet(&player.theora, &packet);
         }
         else if (vorbis_synthesis_idheader(&packet))
         {
             TRACE_INFO("index: %d serial: %d type: VORBIS", i, player.logical_pool.stream[i].serial_num);
-            player.vorbis_logical_stream = player.logical_pool[i].stream;
+            player.vorbis_logical_stream = &player.logical_pool.stream[i];
         }
         else
             TRACE_INFO("index: %d serial: %d type: UNKNOWN", i, player.logical_pool.stream[i].serial_num);
@@ -84,23 +85,24 @@ main(int argc, char** argv)
     return EXIT_SUCCESS;
 }
 
+/**********
+ * PLAYER *
+ **********/
+
+void
+player_init(ogg_player_t* player)
+{
+    memset(player, 0, sizeof(ogg_player_t));
+
+    ogg_sync_init(&player->physical_stream);
+
+    theora_info_init(&player->theora.info);
+    theora_comment_init(&player->theora.comment);
+}
 
 /*******
  * OGG *
  *******/
-
-
-//void
-//ogg_init(ogg_player_t* player)
-//{
-//    TRACE_DEBUG("");
-//    memset(&physical_stream_, 0x00, sizeof(ogg_sync_state));
-//    memset(&theora_stream_state_, 0x00, sizeof(ogg_stream_state));
-//    memset(&page_, 0x00, sizeof(ogg_page));
-//    memset(&packet_, 0x00, sizeof(ogg_packet));
-
-//    ogg_sync_init(&physical_stream_);
-//}
 
 void
 ogg_read_block_into_physical_stream(ogg_player_t* player)
@@ -168,19 +170,6 @@ ogg_pull_packet_from_logical_stream(ogg_player_t*     player,
  * THEORA *
  **********/
 
-void
-theora_init()
-{
-    TRACE_DEBUG("");
-    memset(&theora_info_, 0x00, sizeof(theora_info));
-    memset(&theora_comment_, 0x00, sizeof(theora_comment));
-    memset(&theora_state_, 0x00, sizeof(theora_state));
-    memset(&yuv_frame_, 0x00, sizeof(yuv_buffer));
-
-    theora_info_init(&theora_info_);
-    theora_comment_init(&theora_comment_);
-}
-
 int
 is_theora_packet(ogg_packet* packet)
 {
@@ -193,38 +182,29 @@ is_theora_packet(ogg_packet* packet)
 }
 
 void
-theora_decode_header_packet()
+theora_decode_header_packet(theora_t* theora, ogg_packet* packet)
 {
-    TRACE_DEBUG("");
-//    while (1)
-//    {
-
-//    ogg_pull_packet_from_logical_stream();
-//    int ret = w_theora_decode_header(&theora_info_, &theora_comment_, &packet_);
-//    if (ret == 0)
-//        return;
-
-//    }
+    w_theora_decode_header(&theora->info, &theora->comment, packet);
 }
 
 void
-theora_decode_identification_header_packet()
+theora_decode_identification_header_packet(theora_t*   theora,
+                                           ogg_packet* packet)
 {
     TRACE_DEBUG("");
-//    ogg_init_logical_stream();
-    theora_decode_header_packet();
+    theora_decode_header_packet(theora, packet);
 }
 
 void
-theora_decode_comment_header_packet()
+theora_decode_comment_header_packet(theora_t* theora, ogg_packet* packet)
 {
     TRACE_DEBUG("");
-    theora_decode_header_packet();
+    theora_decode_header_packet(theora, packet);
 }
 
 void
-theora_decode_setup_header_packet()
+theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet)
 {
     TRACE_DEBUG("");
-    theora_decode_header_packet();
+    theora_decode_header_packet(theora, packet);
 }

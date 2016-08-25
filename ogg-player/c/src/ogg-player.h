@@ -2,6 +2,7 @@
 #define __OGG_PLAYER_H
 
 #include "wrap-ogg.h"
+#include "wrap-theora.h"
 
 typedef struct
 {
@@ -17,16 +18,25 @@ typedef struct
 
 typedef struct
 {
+    ogg_logical_stream_t* logical_stream;
+    theora_comment        comment;
+    theora_info           info;
+    theora_state          state;
+} theora_t;
+
+typedef struct
+{
     FILE*                     fd;
     ogg_sync_state            physical_stream;
     ogg_logical_stream_pool_t logical_pool;
+
     ogg_logical_stream_t*     skeleton_logical_stream;
-    ogg_logical_stream_t*     theora_logical_stream;
+    theora_t                  theora;
     ogg_logical_stream_t*     vorbis_logical_stream;
 } ogg_player_t;
 
-//void
-//ogg_init();
+void
+player_init(ogg_player_t* player);
 
 #define PHYSICAL_STREAM_READ_SUCCESS    0
 #define PHYSICAL_STREAM_END             1
@@ -55,22 +65,22 @@ ogg_pull_packet_from_logical_stream(ogg_player_t*     player,
                                     ogg_stream_state* logical_stream,
                                     ogg_packet*       packet);
 
-void
-theora_init();
+//void
+//theora_init();
 
 int
 is_theora_packet(ogg_packet* packet);
 
 void
-theora_decode_header_packet();
+theora_decode_header_packet(theora_t* theora, ogg_packet* packet);
 
 void
-theora_decode_identification_header_packet();
+theora_decode_identification_header_packet(theora_t* theora, ogg_packet* packet);
 
 void
-theora_decode_comment_header_packet();
+theora_decode_comment_header_packet(theora_t* theora, ogg_packet* packet);
 
 void
-theora_decode_setup_header_packet();
+theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet);
 
 #endif // __OGG_PLAYER_H
