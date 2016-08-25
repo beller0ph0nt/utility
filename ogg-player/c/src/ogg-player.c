@@ -12,12 +12,6 @@
 
 #define PHYSICAL_STREAM_READ_BLOCK_SIZE     8192
 
-theora_comment   theora_comment_;
-theora_info      theora_info_;
-theora_state     theora_state_;
-
-yuv_buffer       yuv_frame_;
-
 int
 main(int argc, char** argv)
 {
@@ -30,16 +24,11 @@ main(int argc, char** argv)
     ogg_player_t player;
     player_init(&player);
 
-
     player.fd = fopen(argv[1], "r");
-
-//    ogg_init(&player);
-
-
-//    theora_init();
 
     ogg_page   page;
     ogg_packet packet;
+//    yuv_buffer yuv_frame;
 
     do
     {
@@ -74,11 +63,15 @@ main(int argc, char** argv)
     }
     TRACE_INFO("******************************");
 
+    ogg_pull_packet_from_logical_stream(&player, &player.theora.logical_stream->state, &packet);
+    theora_decode_comment_header_packet(&player.theora, &packet);
 
+    ogg_pull_packet_from_logical_stream(&player, &player.theora.logical_stream->state, &packet);
+    theora_decode_setup_header_packet(&player.theora, &packet);
 
-//    theora_decode_identification_header_packet();
-//    theora_decode_comment_header_packet();
-//    theora_decode_setup_header_packet();
+//    while (!feof(player.fd))
+//    {
+//    }
 
     fclose(player.fd);
 
@@ -208,3 +201,8 @@ theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet)
     TRACE_DEBUG("");
     theora_decode_header_packet(theora, packet);
 }
+
+
+/**********
+ * VORBIS *
+ **********/
