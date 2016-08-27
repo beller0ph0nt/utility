@@ -38,6 +38,9 @@ typedef struct
 void
 player_init(ogg_player_t* player);
 
+void
+player_free(ogg_player_t* player);
+
 #define PHYSICAL_STREAM_READ_SUCCESS    0
 #define PHYSICAL_STREAM_END             1
 
@@ -48,8 +51,7 @@ ogg_read_block_into_physical_stream(ogg_player_t* player);
 #define PAGE_ENDED          1
 
 void
-ogg_pull_page_from_physical_stream(ogg_player_t* player,
-                                   ogg_page*     page);
+ogg_pull_page_from_physical_stream(ogg_player_t* player, ogg_page* page);
 
 void
 ogg_init_stream_in_logical_stream_pool(ogg_logical_stream_pool_t* pool,
@@ -82,5 +84,11 @@ theora_decode_comment_header_packet(theora_t* theora, ogg_packet* packet);
 
 void
 theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet);
+
+float*
+theora_create_rgb_buffer(uint32_t width, uint32_t height);
+
+void
+theora_yuv_to_rgb(yuv_buffer* yuv_buffer, float* rgb_buffer);
 
 #endif // __OGG_PLAYER_H
