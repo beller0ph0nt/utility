@@ -85,10 +85,10 @@ theora_decode_comment_header_packet(theora_t* theora, ogg_packet* packet);
 void
 theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet);
 
-float*
+unsigned char*
 theora_create_rgb_buffer(uint32_t width, uint32_t height);
 
 void
-theora_yuv_to_rgb(yuv_buffer* yuv_buffer, float* rgb_buffer);
+theora_yuv_to_rgb(yuv_buffer* yuv_buffer, unsigned char* rgb_buffer);
 
 #endif // __OGG_PLAYER_H
