@@ -139,24 +139,22 @@ main(int argc, char** argv)
         glColor4f(1, 1, 1, 1);
         glTranslatef(50, 50, 0);
         glScalef(1, 1, 1);
+
         glBegin(GL_QUADS);
+            glTexCoord2i(0, yuv.y_height - 1);
+            glVertex3i(0, 0, 9);
 
-        glTexCoord2i(0, yuv.y_height - 1);
-        glVertex3i(0, 0, 9);
+            glTexCoord2i(0, 0);
+            glVertex3i(0, yuv.y_height, 9);
 
-        glTexCoord2i(0, 0);
-        glVertex3i(0, yuv.y_height, 9);
+            glTexCoord2i(yuv.y_width - 1, 0);
+            glVertex3i(yuv.y_width, yuv.y_height, 9);
 
-        glTexCoord2i(yuv.y_width - 1, 0);
-        glVertex3i(yuv.y_width, yuv.y_height, 9);
-
-        glTexCoord2i(yuv.y_width - 1, yuv.y_height - 1);
-        glVertex3i(yuv.y_width, 0, 9);
-
+            glTexCoord2i(yuv.y_width - 1, yuv.y_height - 1);
+            glVertex3i(yuv.y_width, 0, 9);
         glEnd();
 
         glFinish();
-//        SwapBuffers(hDC);
 
 //        break;
     }
