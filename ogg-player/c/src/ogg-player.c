@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include <GL/gl.h>
-//#include <GL/glut.h>
+#include <GL/glut.h>
 
 #include <vorbis/vorbisenc.h>
 
@@ -86,6 +86,14 @@ main(int argc, char** argv)
                                         &packet);
     theora_decode_setup_header_packet(&player.theora, &packet);
 
+
+//    glutInit(&argc, argv);
+//    glutInitDisplayMode(GLUT_RGBA);
+//    glutInitWindowPosition(100, 200);
+//    glutInitWindowSize(400, 400);
+//    glutCreateWindow("ogg-player");
+
+    glutMainLoop();
 
     yuv_buffer yuv;
     unsigned char* rgb_buffer = \
