@@ -36,6 +36,9 @@ typedef struct
 } ogg_player_t;
 
 void
+display();
+
+void
 player_init(ogg_player_t* player);
 
 void

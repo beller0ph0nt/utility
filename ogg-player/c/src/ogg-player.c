@@ -15,6 +15,71 @@
 
 #define PHYSICAL_STREAM_READ_BLOCK_SIZE     8192
 
+static int width = 0;
+static int height = 0;
+
+static ogg_player_t player;
+
+static yuv_buffer yuv;
+static unsigned char* rgb_buffer = NULL;
+
+static ogg_packet packet;
+
+
+
+
+//void
+//init()
+//{
+//}
+
+
+void
+idle()
+{
+    if (feof(player.fd))
+    {
+        TRACE_INFO("decode finished");
+
+        free(rgb_buffer);
+        fclose(player.fd);
+        player_free(&player);
+        exit(0);
+
+//        return;
+    }
+
+    TRACE_INFO("decode new page...");
+
+    ogg_pull_packet_from_logical_stream(&player,
+                                        &player.theora.logical_stream->state,
+                                        &packet);
+    theora_decode_packetin(&player.theora.state, &packet);
+    theora_decode_YUVout(&player.theora.state, &yuv);
+
+//        TRACE_INFO("y   width:  %d  height: %d  stride: %d"
+//                   "    "
+//                   "uv  width:  %d  height: %d  stride: %d\n"
+//                   "uv.width  / y.width  = %f\n"
+//                   "uv.height / y.height = %f",
+//                   yuv.y_width,
+//                   yuv.y_height,
+//                   yuv.y_stride,
+//                   yuv.uv_width,
+//                   yuv.uv_height,
+//                   yuv.uv_stride,
+//                   (float) (yuv.uv_width * 1.0 / yuv.y_width),
+//                   (float) (yuv.uv_height * 1.0 / yuv.y_height));
+//
+
+    theora_yuv_to_rgb(&yuv, rgb_buffer);
+
+    display();
+
+//    glutPostRedisplay();
+}
+
+
 int
 main(int argc, char** argv)
 {
@@ -24,7 +89,7 @@ main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    ogg_player_t player;
+
     player_init(&player);
 
     player.fd = fopen(argv[1], "r");
@@ -38,7 +103,7 @@ main(int argc, char** argv)
     }
     while (ogg_page_bos(&page));
 
-    ogg_packet packet;
+
 
     TRACE_INFO("********LOGICAL STREAMS*******");
     int i;
@@ -86,96 +151,136 @@ main(int argc, char** argv)
                                         &packet);
     theora_decode_setup_header_packet(&player.theora, &packet);
 
+    width = player.theora.info.frame_width;
+    height = player.theora.info.frame_height;
 
-//    glutInit(&argc, argv);
-//    glutInitDisplayMode(GLUT_RGBA);
-//    glutInitWindowPosition(100, 200);
-//    glutInitWindowSize(400, 400);
-//    glutCreateWindow("ogg-player");
+
+    rgb_buffer = theora_create_rgb_buffer(width, height);
+
+
+
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGBA);
+    glutInitWindowPosition(100, 200);
+    glutInitWindowSize(width, height);
+    glutCreateWindow("ogg-player");
+
+
+//    glClearColor(0.0, 0.0, 0.0, 1.0);
+//    glMatrixMode(GL_PROJECTION);
+//    glLoadIdentity();
+//    glOrtho(-200.0, 200.0, -200.0, 200.0, -200.0, 200.0);
+
+    glutIdleFunc(idle);
+//    glutDisplayFunc(display);
 
     glutMainLoop();
 
-    yuv_buffer yuv;
-    unsigned char* rgb_buffer = \
-        theora_create_rgb_buffer(player.theora.info.frame_width,
-                                 player.theora.info.frame_height);
-    while (!feof(player.fd))
-    {
-        ogg_pull_packet_from_logical_stream(&player,
-                                            &player.theora.logical_stream->state,
-                                            &packet);
-        theora_decode_packetin(&player.theora.state, &packet);
-        theora_decode_YUVout(&player.theora.state, &yuv);
-
-//        TRACE_INFO("y   width:  %d  height: %d  stride: %d"
-//                   "    "
-//                   "uv  width:  %d  height: %d  stride: %d\n"
-//                   "uv.width  / y.width  = %f\n"
-//                   "uv.height / y.height = %f",
-//                   yuv.y_width,
-//                   yuv.y_height,
-//                   yuv.y_stride,
-//                   yuv.uv_width,
-//                   yuv.uv_height,
-//                   yuv.uv_stride,
-//                   (float) (yuv.uv_width * 1.0 / yuv.y_width),
-//                   (float) (yuv.uv_height * 1.0 / yuv.y_height));
-//
-//        break;
-        theora_yuv_to_rgb(&yuv, rgb_buffer);
-
-
-        glTexImage2D(GL_TEXTURE_RECTANGLE_NV,
-                     0,
-                     GL_RGB,
-                     yuv.y_width,
-                     yuv.y_height,
-                     0,
-                     GL_RGB,
-                     GL_UNSIGNED_BYTE,
-                     rgb_buffer);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glMatrixMode(GL_MODELVIEW);
-        double mv[16] = { 1,  0,  0,  0,
-                          0,  1,  0,  0,
-                          0,  0, -1,  0,
-                          0,  0,  0,  1 };
-        glLoadMatrixd(&mv[0]);
-        glDisable(GL_TEXTURE_2D);
-        glEnable(GL_TEXTURE_RECTANGLE_NV);
-        glColor4f(1, 1, 1, 1);
-        glTranslatef(50, 50, 0);
-        glScalef(1, 1, 1);
-
-        glBegin(GL_QUADS);
-            glTexCoord2i(0, yuv.y_height - 1);
-            glVertex3i(0, 0, 9);
-
-            glTexCoord2i(0, 0);
-            glVertex3i(0, yuv.y_height, 9);
-
-            glTexCoord2i(yuv.y_width - 1, 0);
-            glVertex3i(yuv.y_width, yuv.y_height, 9);
-
-            glTexCoord2i(yuv.y_width - 1, yuv.y_height - 1);
-            glVertex3i(yuv.y_width, 0, 9);
-        glEnd();
-
-        glFinish();
-
-//        break;
-    }
-
-    free(rgb_buffer);
 
 
 
-    fclose(player.fd);
+    TRACE_INFO("exiting...");
 
-    player_free(&player);
+
 
     return EXIT_SUCCESS;
+}
+
+/**********
+ * OpenGL *
+ **********/
+
+void
+display()
+{
+    TRACE_INFO("display...");
+
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    glColor3f(1.0, 1.0, 1.0);
+//    glBegin(GL_POINTS);
+//        glVertex2f(0.0, 0.0);
+//        glVertex2f(1.0, 1.0);
+//        glVertex2f(2.0, 2.0);
+//        glVertex2f(3.0, 3.0);
+//        glVertex2f(4.0, 4.0);
+//        glVertex2f(5.0, 5.0);
+//    glEnd();
+//    glFlush();
+
+
+    GLuint frame_tex;
+    glGenTextures(1, &frame_tex);
+    glBindTexture(GL_TEXTURE_2D, frame_tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgb_buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glEnable(GL_TEXTURE_2D);
+    glColor3d(1.0, 1.0, 1.0);
+
+//    glBegin(GL_QUADS);
+//        glTexCoord2i(0, height - 1);
+//        glVertex3i(0, 0, 9);
+//
+//        glTexCoord2i(0, 0);
+//        glVertex3i(0, height, 9);
+//
+//        glTexCoord2i(width - 1, 0);
+//        glVertex3i(width, height, 9);
+//
+//        glTexCoord2i(width - 1, height - 1);
+//        glVertex3i(width, 0, 9);
+//    glEnd();
+
+
+//    glTexImage2D(GL_TEXTURE_RECTANGLE_NV,
+//                 0,
+//                 GL_RGBA,
+//                 width,
+//                 height,
+//                 0,
+//                 GL_RGBA,
+//                 GL_UNSIGNED_BYTE,
+//                 rgb_buffer);
+//
+//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//    glMatrixMode(GL_MODELVIEW);
+//
+////        double mv[4][4] = {
+////            { 1.0,  0.0,  0.0,  0.0 },
+////            { 0.0,  1.0,  0.0,  0.0 },
+////            { 0.0,  0.0, -1.0,  0.0 },
+////            { 0.0,  0.0,  0.0,  1.0 }
+////        };
+//
+//    double mv[16] = { 1,  0,  0,  0,
+//                      0,  1,  0,  0,
+//                      0,  0, -1,  0,
+//                      0,  0,  0,  1 };
+//
+//    glLoadMatrixd(&mv[0]);
+//    glDisable(GL_TEXTURE_2D);
+//    glEnable(GL_TEXTURE_RECTANGLE_NV);
+//    glColor4f(1, 1, 1, 1);
+//    glTranslatef(50, 50, 0);
+//    glScalef(1, 1, 1);
+//
+//    glBegin(GL_QUADS);
+//        glTexCoord2i(0, height - 1);
+//        glVertex3i(0, 0, 9);
+//
+//        glTexCoord2i(0, 0);
+//        glVertex3i(0, height, 9);
+//
+//        glTexCoord2i(width - 1, 0);
+//        glVertex3i(width, height, 9);
+//
+//        glTexCoord2i(width - 1, height - 1);
+//        glVertex3i(width, 0, 9);
+//    glEnd();
+//
+//    glFinish();
 }
 
 /**********
@@ -320,7 +425,7 @@ theora_decode_setup_header_packet(theora_t* theora, ogg_packet* packet)
 unsigned char*
 theora_create_rgb_buffer(uint32_t width, uint32_t height)
 {
-    unsigned char* buffer = calloc(width * height, 3);
+    unsigned char* buffer = calloc(width * height, 4);
 
     return buffer;
 }
@@ -338,31 +443,32 @@ clamp(float x, int min, int max)
 }
 
 void
-theora_yuv_to_rgb(yuv_buffer* yuv_buffer, unsigned char* rgb_buffer)
+theora_yuv_to_rgb(yuv_buffer* yuv, unsigned char* rgb)
 {
     int y_row;
-    for (y_row = 0; y_row < yuv_buffer->y_height; y_row++)
+    for (y_row = 0; y_row < yuv->y_height; y_row++)
     {
-        int y_row_offset = yuv_buffer->y_stride * y_row;
-        int uv_row_offset = yuv_buffer->uv_stride * y_row / 2;
+        int y_row_offset = yuv->y_stride * y_row;
+        int uv_row_offset = yuv->uv_stride * y_row / 2;
 
         int y_col;
-        for (y_col = 0; y_col < yuv_buffer->y_width; y_col++)
+        for (y_col = 0; y_col < yuv->y_width; y_col++)
         {
             int uv_col = y_col / 2;
 
-            unsigned char Y = yuv_buffer->y[y_row_offset + y_col];
-            unsigned char U = yuv_buffer->u[uv_row_offset + uv_col];
-            unsigned char V = yuv_buffer->v[uv_row_offset + uv_col];
+            unsigned char Y = yuv->y[y_row_offset + y_col];
+            unsigned char U = yuv->u[uv_row_offset + uv_col];
+            unsigned char V = yuv->v[uv_row_offset + uv_col];
 
             float r = Y + 1.371f * (V - 128);
             float g = Y - 0.698f * (V - 128) - 0.336f * (U - 128);
             float b = Y + 1.732f * (U - 128);
 
-            int index = (y_row * yuv_buffer->y_width + y_col) * 3;
-            rgb_buffer[index + 0] = clamp(r, 0, 255);
-            rgb_buffer[index + 1] = clamp(g, 0, 255);
-            rgb_buffer[index + 2] = clamp(b, 0, 255);
+            int index = (y_row * yuv->y_width + y_col) * 3;
+            rgb[index + 0] = clamp(r, 0, 255);
+            rgb[index + 1] = clamp(g, 0, 255);
+            rgb[index + 2] = clamp(b, 0, 255);
+            rgb[index + 3] = 255;
         }
     }
 }
