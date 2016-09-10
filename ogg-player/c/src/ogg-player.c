@@ -25,6 +25,8 @@ static unsigned char* rgb_buffer = NULL;
 
 static ogg_packet packet;
 
+static GLuint frame_tex;
+
 
 
 
@@ -94,6 +96,7 @@ main(int argc, char** argv)
 
     player.fd = fopen(argv[1], "r");
 
+    // read header pages
     ogg_page   page;
 
     do
@@ -104,6 +107,8 @@ main(int argc, char** argv)
     while (ogg_page_bos(&page));
 
 
+
+    // setup logical streams
 
     TRACE_INFO("********LOGICAL STREAMS*******");
     int i;
@@ -151,6 +156,9 @@ main(int argc, char** argv)
                                         &packet);
     theora_decode_setup_header_packet(&player.theora, &packet);
 
+
+
+
     width = player.theora.info.frame_width;
     height = player.theora.info.frame_height;
 
@@ -172,13 +180,45 @@ main(int argc, char** argv)
 //    glLoadIdentity();
 //    glOrtho(-200.0, 200.0, -200.0, 200.0, -200.0, 200.0);
 
-    glutIdleFunc(idle);
+
+    glGenTextures(1, &frame_tex);
+    glBindTexture(GL_TEXTURE_2D, frame_tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+//    glutIdleFunc(idle);
 //    glutDisplayFunc(display);
 
-    glutMainLoop();
+//    glutMainLoop();
 
 
 
+
+
+
+
+    while (!feof(player.fd))
+    {
+        ogg_pull_packet_from_logical_stream(&player,
+                                            &player.theora.logical_stream->state,
+                                            &packet);
+        theora_decode_packetin(&player.theora.state, &packet);
+        theora_decode_YUVout(&player.theora.state, &yuv);
+        theora_yuv_to_rgb(&yuv, rgb_buffer);
+
+        display();
+
+//        break;
+        sleep(1);
+    }
+
+
+
+    free(rgb_buffer);
+    fclose(player.fd);
+    player_free(&player);
 
     TRACE_INFO("exiting...");
 
@@ -209,29 +249,28 @@ display()
 //    glFlush();
 
 
-    GLuint frame_tex;
-    glGenTextures(1, &frame_tex);
+
     glBindTexture(GL_TEXTURE_2D, frame_tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgb_buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rgb_buffer);
 
     glEnable(GL_TEXTURE_2D);
-    glColor3d(1.0, 1.0, 1.0);
+//    glColor3d(1.0, 1.0, 1.0);
 
-//    glBegin(GL_QUADS);
-//        glTexCoord2i(0, height - 1);
-//        glVertex3i(0, 0, 9);
-//
-//        glTexCoord2i(0, 0);
-//        glVertex3i(0, height, 9);
-//
-//        glTexCoord2i(width - 1, 0);
-//        glVertex3i(width, height, 9);
-//
-//        glTexCoord2i(width - 1, height - 1);
-//        glVertex3i(width, 0, 9);
-//    glEnd();
+    glBegin(GL_QUADS);
+        glTexCoord2i(0, height - 1);
+        glVertex3i(0, 0, 9);
+
+        glTexCoord2i(0, 0);
+        glVertex3i(0, height, 9);
+
+        glTexCoord2i(width - 1, 0);
+        glVertex3i(width, height, 9);
+
+        glTexCoord2i(width - 1, height - 1);
+        glVertex3i(width, 0, 9);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
 
 //    glTexImage2D(GL_TEXTURE_RECTANGLE_NV,
@@ -280,7 +319,8 @@ display()
 //        glVertex3i(width, 0, 9);
 //    glEnd();
 //
-//    glFinish();
+
+    glFinish();
 }
 
 /**********
