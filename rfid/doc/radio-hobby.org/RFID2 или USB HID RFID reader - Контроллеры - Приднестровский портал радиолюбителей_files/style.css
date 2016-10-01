@@ -1,0 +1,26 @@
+.news_analogs {
+	margin: 5px;
+	padding: 5px;
+}
+
+.news_analogs > div {
+	min-height: 50px;
+	padding: 5px 0;
+}
+
+.news_analogs > div + div {
+	border-top: 1px dashed;
+}
+
+.news_analogs .img_left {
+	float: left;
+	height: 47px;
+	overflow: hidden;
+	margin-right: 3px;
+	width: 80px;
+}
+
+.news_analogs .img_left > img {
+	margin: 2px;
+	width: 75px;
+}

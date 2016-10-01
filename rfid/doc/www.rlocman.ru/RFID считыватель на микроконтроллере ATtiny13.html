@@ -1,0 +1,886 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta http-equiv="Content-language" content="ru">
+<meta name="description" content="В последнее время приобрели широкую популярность разнообразные проекты на базе RFID ключей, применяемые в системах безопасности, охраны и разграничения доступа. На некоторых предприятиях и организациях такие системы, дополненные специализированным программным обеспечением, применяются для">
+<meta name="keywords" content="RFID считыватель на микроконтроллере ATtiny13">
+<link rel="stylesheet" type="text/css" href="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/style-33fabf47-00002.css" id="vbulletin_css">
+<link rel="stylesheet" href="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/news.css" type="text/css">
+<link rel="stylesheet" href="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/d.css" type="text/css">
+<title>RFID считыватель на микроконтроллере ATtiny13</title>
+<meta property="og:image" content="http://www.rlocman.ru/i/Image/2013/05/31/RFID_tag_1.jpg">
+<script src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/analytics.js" async="" type="text/javascript"></script><script src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/gtm.js" async=""></script><script type="text/javascript" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/head.js"></script>
+</head>
+<body>
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-P65WVN"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P65WVN');</script>
+<div class="cent"><iframe class="sofgnobjkdukbdtgewwc" src="http://search.supplyframe.com/partner/17/ipo950/" marginheight="0" marginwidth="0" scrolling="no" frameborder="0" height="155" width="950"></iframe>
+</div><form action="/shem/search.html" method="get">
+<table id="mm" cellspacig="0" align="center" cellpadding="0" width="973"><tbody><tr><td width="733">
+
+<table class="mml" cellspacig="0" cellpadding="0"><tbody><tr><td><ul class="mmld">
+<li class="mml0 mmldt"><a href="http://www.rlocman.ru/" class="mmt1 mmldt">&nbsp;Все&nbsp;*</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/measure/">Измерения</a></li><li><a href="http://www.rlocman.ru/mcu/">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/power/">Силовая электроника</a></li><li><a href="http://www.rlocman.ru/chip/">Электронные компоненты</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/news/" class="mmt1 mmldt">Новости</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/news/search.html?rz=0236">Беспроводные технологии</a></li><li><a href="http://www.rlocman.ru/news/search.html?rz=0214">Измерительная техника</a></li><li><a href="http://www.rlocman.ru/news/search.html?rz=0110">Компоненты для источников питания</a></li><li><a href="http://www.rlocman.ru/news/search.html?rz=0107">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/news/search.html?rz=0213">Силовая электроника</a></li><li><a href="http://www.rlocman.ru/news/search.html">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/review/" class="mmt1 mmldt">Статьи</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/news/search.html?rz=0236">Беспроводные технологии</a></li><li><a href="http://www.rlocman.ru/review/search.html?rz=0102">Датчики</a></li><li><a href="http://www.rlocman.ru/review/search.html?rz=0214">Измерительная техника</a></li><li><a href="http://www.rlocman.ru/review/search.html?rz=0110">Компоненты для источников питания</a></li><li><a href="http://www.rlocman.ru/review/search.html?rz=0107">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/review/search.html?rz=0213">Силовая электроника</a></li><li><a href="http://www.rlocman.ru/review/search.html">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/book/search.html" class="mmt1 mmldt">Библио</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/library/">Электронная библиотека</a></li><li><a href="http://www.rlocman.ru/magazine/">Журнал РадиоЛоцман</a></li><li><a href="http://www.rlocman.ru/radioyearbook/">Журнал Радиоежегодник</a></li><li><a href="http://www.rlocman.ru/book/search.html">... »</a></li></ul></li><li class="mml2 mmldt"><b><a href="http://www.rlocman.ru/shem/" class="mmt2 mmldt">Схемы</a></b><ul class="mmldi"><li><a href="http://www.rlocman.ru/shem/search.html?rz=0208">Авто</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0242">Автоматика</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0227">Application Notes</a></li><li><a href="http://www.rlocman.ru/shem/search.html?tg=arduino">Arduino</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0202">Аудио</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0236">Беспроводные технология</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0231">Ветроэнергетика</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0214">Измерения</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0229">Начинающим</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0243">Открытые МК-платформы</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0201">Питание</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0210">Применение микроконтроллеров</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0239">Робототехника</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0205">Светотехника</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0213">Силовая электроника</a></li><li><a href="http://www.rlocman.ru/shem/search.html?rz=0234">Солнечная энергетика</a></li><li><a href="http://www.rlocman.ru/shem/search.html">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/datasheet/" class="mmt1 mmldt">Datasheet</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=0201011401">АЦП</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=020101110201">DC/DC преобразователи и контроллеры</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=0201030201">Светодиодные излучатели</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=0201010601">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=0201010708">Операционные усилители</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html?rz=0201011107">Источники опорного напряжения</a></li><li><a href="http://www.rlocman.ru/datasheet/search.html">... »</a></li><li><a href="http://www.datasheet.ru/" target="_blank">www.datasheet.ru</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/cat/" class="mmt1 mmldt">Сайты</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/cat/search.html?rz=03">Измерения</a></li><li><a href="http://www.rlocman.ru/cat/search.html?rz=0101">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/cat/search.html?rz=13">Силовая электроника</a></li><li><a href="http://www.rlocman.ru/cat/search.html?rz=09">Средства разработки</a></li><li><a href="http://www.rlocman.ru/cat/search.html?rz=01">Электронные компоненты</a></li><li><a href="http://www.rlocman.ru/cat/search.html">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/op/" class="mmt1 mmldt">Приборы</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/op/search.html?rz=020403">Мультиметры</a></li><li><a href="http://www.rlocman.ru/op/search.html?rz=020402">Осциллографы</a></li><li><a href="http://www.rlocman.ru/op/search.html?rz=020805">Оценочные и демо платы</a></li><li><a href="http://www.rlocman.ru/op/search.html?rz=020801">Программаторы</a></li><li><a href="http://www.rlocman.ru/op/">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/comp/shop.html" class="mmt1 mmldt">Цены</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/comp/shop.html?rz=020102">Дискретные приборы</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=0204">Измерительная техника</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=0213">Инструмент и принадлежности</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=0123">Компьютеры и периферия</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=020101">Микросхемы</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=01">Потребительская техника</a></li><li><a href="http://www.rlocman.ru/comp/shop.html?rz=0202">Промышленная автоматика</a></li><li><a href="http://www.rlocman.ru/comp/shop.html">... »</a></li></ul></li><li class="mml1 mmldt"><a href="http://www.rlocman.ru/forum/" class="mmt1 mmldt">Форум</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=52">Arduino</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=9">Аудио</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=34">Ветроэнергетика</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=4">Микроконтроллеры</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=22">Питание</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=16">Телевидение</a></li><li><a href="http://www.rlocman.ru/forum/forumdisplay.php?f=2">Электронные компоненты</a></li><li><a href="http://www.rlocman.ru/forum/">... »</a></li></ul></li><li class="mml1 mmldt"><a class="mmt1 mmldt">Еще »</a><ul class="mmldi"><li><a href="http://www.rlocman.ru/program/search.html">Программы</a></li><li><a href="http://www.rlocman.ru/pot/">Потребительская электроника</a></li><li><a href="http://www.rlocman.ru/newsletter/">Подписка на обновления</a></li><li><a href="http://www.rlocman.ru/advert/">Реклама</a></li></ul></li></ul>
+</td>
+<td>&nbsp;</td>
+</tr></tbody></table>
+
+</td>
+<td width="42">&nbsp;</td>
+<td class="mmi" rowspan="2" width="156"><a href="http://www.rlocman.ru/"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/logo-radiolocman.gif" alt="Радиолоцман Электроника" height="72" border="0" width="156"></a></td>
+<td class="mmi1" width="42"><a href="http://www.radiolocman.com/" target="_blank" class="mmi2">en</a></td>
+</tr><tr class="mms">
+
+<td class="mms1">
+<table class="mms" cellspacig="0" cellpadding="0" width="100%">
+<tbody><tr>
+<td class="mms2"><input name="q" id="q" class="mms2i" size="32" maxlength="60" type="search">
+</td>
+<td class="mms3"><input value=" Поиск " type="submit"></td>
+<td class="mms4"><a href="http://www.rlocman.ru/shem/search.html?adv=1" class="mms4a">расширенный поиск +</a></td>
+</tr>
+</tbody></table>
+</td>
+<td>&nbsp;</td><td>&nbsp;</td>
+</tr></tbody></table>
+</form><table align="center" border="0" cellpadding="0" cellspacing="0" width="973"><tbody><tr valign="top"><td class="cen">
+<div class="cen2">
+<table align="right" border="0" cellpadding="0" cellspacing="0"><tbody><tr class="pb" valign="top"><td class="sd" style="padding:0 5px 0 5px">Срезы:</td><td style="white-space:nowrap;border-left:2px solid #c00;padding:0 10px 3px 5px;background-color:#fcfcee"><b><a href="http://www.rlocman.ru/sec/" class="b">Безопасность</a><br><a href="http://www.rlocman.ru/wireless/" class="b">Беспроводные</a><br><a href="http://www.rlocman.ru/mcu/" class="b">Микроконтроллеры</a></b></td></tr></tbody></table><div class="pb"><a href="http://www.rlocman.ru/"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/h.gif" alt="Радиолоцман" align="absmiddle" height="13" border="0" width="14"></a> <b>»</b> <a href="http://www.rlocman.ru/shem/" class="b"><b>Схемы</b></a> <b>»</b> <a href="http://www.rlocman.ru/shem/search.html?rz=0215" class="b">Безопасность</a> <b>·</b> <a href="http://www.rlocman.ru/shem/search.html?rz=0236" class="b">Беспроводные</a> <b>·</b> <a href="http://www.rlocman.ru/shem/search.html?rz=0210" class="b">Применение микроконтроллеров</a></div><p></p><div class="pb"><span class="g">31-05-2013</span></div><h1>RFID считыватель на микроконтроллере ATtiny13</h1></div><iframe class="sofgnobjkdukbdtgewwc" scrolling="no" marginwidth="0" marginheight="0" src="http://search.supplyframe.com/partner/17/searchAd728x90/" style="width:728px; height:90px;margin:0;" align="top" frameborder="0"></iframe>
+<div class="cen2"></div><div class="cen2"><p>В последнее время приобрели широкую популярность разнообразные проекты на базе <a href="http://ru.wikipedia.org/wiki/RFID" target="_blank">RFID</a>
+ ключей, применяемые в системах безопасности, охраны и разграничения 
+доступа. На некоторых предприятиях и организациях такие 
+системы,&nbsp;дополненные специализированным программным обеспечением, 
+применяются для фиксирования рабочего времени, учета материальных 
+ценностей и пр.</p>
+<p>Любая система радиочастотной идентификации (RFID) состоит из 
+считывающего устройства (считыватель, ридер или интеррогатор) и 
+транспондера (он же RFID-метка, иногда также применяется термин 
+RFID-тег). В статье мы рассмотрим простое устройство для считывания RFID
+ ключей, поддерживающих протокол <a href="http://www.datasheet.ru/search.html?cx=005338834574777012439%3Aqye0jsmt8tw&amp;cof=FORID%3A11&amp;q=EM4100&amp;ie=windows-1251&amp;oe=windows-1251&amp;sa=+%CF%EE%E8%F1%EA+" target="_blank">EM4100</a> и работающие на частоте 125 кГц. Данный тип RFID-ключей может иметь форму брелока или кредитной карточки (Рисунок 1).</p>
+<table style="width: 480px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_tag_1.jpg" style="width: 200px; height: 200px" alt=""><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_tag_card.jpg" style="width: 267px; height: 200px" alt=""></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 1.</em></td>
+            <td style="text-align: left; width: 410px; vertical-align: top"><strong><em>Конструктивное исполнение RFID-ключей.</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>Основным компонентом считывающего устройства является микроконтроллер <a href="http://www.rlocman.ru/cat/site.html?di=28585" target="_blank">Atmel</a> AVR <a href="http://www.rlocman.ru/datasheet/search.html?q=Attiny13" target="_blank">ATtiny13</a>,
+ который считывает 10-значный уникальный идентификационный номер ключа и
+ передает его в кодировке ASCII по последовательному интерфейсу (UART) 
+со скоростью 2400 бит/с Host-устройству. Другими словами, считыватель 
+представляет собой отдельный модуль, подключаемый к основному процессору
+ или микроконтроллеру системы (Рисунок 2).</p>
+<table style="width: 400px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_reader_pic1.JPG" style="width: 400px; height: 300px" alt="Внешний вид модуля RFID считывателя"></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 2.</em></td>
+            <td style="text-align: left; width: 330px; vertical-align: top"><strong><em>Внешний вид макетной платы модуля RFID считывателя.</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>Принципиальная схема RFID считывателя изображена на Рисунке 3.</p>
+<table style="width: 500px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><a href="http://www.rlocman.ru/i/Image/2013/05/31/125kHz_RFID_reader_sch.GIF" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/125kHz_RFID_reader_sch.GIF" style="border-bottom: 1px solid; border-left: 1px solid; width: 500px; height: 352px; border-top: 1px solid; border-right: 1px solid" alt="Принципиальная схема RFID считывателя."></a></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 3.</em></td>
+            <td style="text-align: left; width: 430px; vertical-align: top"><strong><em>Принципиальная схема RFID считывателя.</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>Рассмотрим основные&nbsp;особенности работы схемы. Микроконтроллер 
+использует встроенный ШИМ модулятор для генерирования на выходе PB0 
+прямоугольных импульсов с частотой 125 кГц. Если на выходе PB0 лог. 0 
+(спадающий фронт импульса), транзистор T1 находится в закрытом 
+состоянии, и на катушку L1 подается напряжение питания +5 В через 
+резистор R1. Нарастающий фронт на выходе PB0 (лог. 1) открывает 
+транзистор T1, и верхний по схеме вывод катушки подключается к «земле». В
+ этот момент катушка оказывается включенной параллельно конденсатору С2,
+ образуя LC генератор (колебательный контур). Переключение транзистора 
+происходит 125,000 раз в секунду (125 кГц). ). В итоге, катушкой 
+генерируется сигнал синусоидальной формы с частотой 125 кГц (Рисунок 4).</p>
+<table style="width: 300px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_signal.jpg" style="border-bottom: 0px solid; border-left: 0px solid; width: 300px; height: 197px; border-top: 0px solid; border-right: 0px solid" alt="Принципиальная схема RFID считывателя."></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 4.</em></td>
+            <td style="text-align: left; width: 230px; vertical-align: top"><strong><em>Сигнал с частотой 125 кГц, генерируемый колебательным контуром, образованным катушкой L1, С2.</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>Модуль считывателяя генерирует электромагнитное поле, энергия 
+которого используется для питания RFID-ключа. В основе передачи энергии 
+между RFID-ключом и считывателем лежит принцип работы обычного 
+трансформатора: первичная обмотка трансформатора создает ЭДС индукции во
+ всех остальных обмотках. Для нашего случая первичной обмоткой является 
+катушка считывателя, а вторичной – катушка RFID-ключа. Элементы D1, C3 и
+ R5 образуют демодулятор сигнала с амплитудной модуляцией.</p>
+<p><strong>Обмен данными между ключом и считывающим устройством</strong></p>
+<p>Процесс обмена данными между RFID-ключом и считывателем очень прост, 
+но продуман до мелочей. Если RFID-ключ должен передать лог. 0, то он к 
+своему источнику питания подключает определенную «нагрузку», что требует
+ больше энергии, передаваемой считывателем. Это вызовет небольшую 
+«просадку» напряжения на стороне считывателя; именно этот уровень 
+воспринимается считывателем как лог. 0 (Рисунок 5).</p>
+<table style="width: 350px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_signal_data.jpg" style="width: 350px; height: 209px" alt="Внешний вид модуля RFID считывателя"></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 5.</em></td>
+            <td style="text-align: left; width: 280px; vertical-align: top"><strong><em>Кадр передачи последовательности битов ...10101....</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>RFID ключ в общем случае передает 64 бита данных в следующей последовательности (Рисунок 6):</p>
+<ol>
+    <li>Первые 9&nbsp; бит&nbsp; (всегда лог. 1) – стартовые биты, свидетельствующие&nbsp; о начале обмена данными.</li>
+    <li>4 бита – младшие значащие биты пользовательского идентификационного номера (D00 – D03).</li>
+    <li>1 бит (P0) – бит контроля четности предыдущих 4 бит.</li>
+    <li>4 бита – старшие значащие биты пользовательского идентификационного номера (D04 – D07).</li>
+    <li>1 бит (P1) – бит контроля четности предыдущих 4 бит.</li>
+    <li>4 бита – первая часть 32-битного серийного номера RFID ключа (D08 – D11).</li>
+    <li>1 бит (P2) – бит контроля четности предыдущих 4 бит.</li>
+    <li>Далее передаются следующие группы по 4 бита серийного номера ключа, каждая с битом контроля четности.</li>
+    <li>Затем передаются 4 бита контроля четности битов по столбцам. К 
+примеру, бит контроля четности PC0 для битов D00, D04, D08, D12, D16, 
+D20, D24, D28, D32 и D36.</li>
+    <li>1 стоп-бит.</li>
+</ol>
+<table style="width: 530px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_tag_64bits_rus.jpg" style="width: 530px; height: 315px" alt="Внешний вид модуля RFID считывателя"></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 6.</em></td>
+            <td style="text-align: left; width: 460px; vertical-align: top"><strong><em>Данные (64 битная последовательность), которые передает RFID-ключ.</em></strong></td>
+        </tr>
+    </tbody>
+</table>
+<p>Проверка целостности данных осуществляется микроконтроллером 
+посредством вычисления битов контроля четности для каждой строки и 
+столбца и сравнения с полученными данными от RFID-ключа.</p>
+<p><strong>Конструкция катушки.</strong></p>
+<p>Бескаркасная катушка индуктивности в считывающем устройстве диаметром
+ 120 мм намотана проводом диаметром 0.5 мм и имеет 58 витков, однако 
+автор рекомендует при намотке добавить еще 2 – 3 витка. С целью 
+повышения эффективности катушки и увеличения расстояния считывания 
+данных RFID-ключа необходимо выполнить калибровку колебательного 
+контура. Если, подключив осциллограф в точку соединения R1 и L1, на 
+экране прибора вы увидите искаженные пики (Рисунок 7), то это говорит о 
+необходимости калибровки катушки L1.</p>
+<table style="width: 400px; font-size: 9pt" align="center" border="0" cellpadding="4" cellspacing="0">
+    <tbody>
+        <tr>
+            <td colspan="2"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/RFID_Coil%2520tuning_rus.jpg" style="border-bottom: 1px solid; border-left: 1px solid; width: 400px; height: 288px; border-top: 1px solid; border-right: 1px solid" alt="Принципиальная схема RFID считывателя."></td>
+        </tr>
+        <tr>
+            <td style="text-align: left; width: 70px; vertical-align: top"><em>Рисунок 7.</em></td>
+            <td style="text-align: left; width: 330px; vertical-align: top"><em><strong>Искажения сигнала, генерируемого катушкой L1, говорит о необходимости калибровки.</strong></em></td>
+        </tr>
+    </tbody>
+</table>
+<p>Калибровку можно выполнить двумя способами после подачи напряжения питания на модуль.</p>
+<ol>
+    <li>Подключите щупы осциллографа в точку соединения R1 и L1 и, 
+увеличивая или уменьшая количество витков катушки L1, добейтесь 
+устранения искажения сигнала. <br>
+    &nbsp;</li>
+    <li>Если у вас нет осциллографа, то медленно подносите RFID-ключ к 
+катушке до момента распознавания ключа, о чем свидетельствует звуковой 
+сигнал. Если ключ определяется с расстояния 2 см, то необходимо 
+добавить/удалить несколько витков и после этого снова проверить 
+расстояние, с которого уверенно считывается ключ. С помощью калибровки 
+автор схемы добился уверенного считывания RFID-ключа с 3 см.</li>
+</ol>
+<p>При программировании микроконтроллера необходимо установить следующую
+ конфигурацию Fuse-битов: младший байт 0x7A и старший байт 0x1F 
+(микроконтроллер работает от встроенного тактового генератора 9.6 МГц, 
+делитель тактовой частоты на 8 отключен). Программный код занимает в 
+памяти микроокнтроллера 1024 Байт – используется весь доступный объем 
+памяти микроконтроллера ATtiny13. Поэтому в дальнейшем при расширении 
+функционала считывателя лучше использовать другой 8-выводный 
+микроконтроллер AVR, например <a href="http://www.rlocman.ru/datasheet/search.html?q=ATtiny85" target="_blank">ATtiny85</a>.</p>
+<p><strong>Загрузки:</strong></p>
+<p>Исходный код программы микроконтроллера (AVRStudio 6), прошивка (.hex) и принципиальная схема – <a href="http://www.rlocman.ru/i/File/2013/05/31/125kHz_RFID_reader.rar">скачать</a></p>
+<p><strong>Дополнительные материалы</strong></p>
+<p><a href="http://www.priority1design.com.au/em4100_protocol.html" target="_blank">Описание протокола EM4100 (англ.) </a></p>
+<p><a href="http://www.serasidis.gr/" target="_blank">serasidis.gr</a></p></div><div class="cen2"></div><div style="background-color:#fcfcee;padding:10px" class="mt5">
+<div class="mt5"><a href="https://easyeda.com/" target="_blank" class="u0"><b>EasyEDA: Бесплатная САПР электронных схем и дешевое создание прототипов печатных плат</b></a></div>
+<div class="mt5"><a href="https://easyeda.com/order" target="_blank" class="u0">10 двухсторонних плат всего за $10. Бесплатно зарегистрируйтесь и получите скидочный купон на $5</a></div>
+<div class="mt5"><a href="https://easyeda.com/" target="_blank" class="u1">www.easyeda.com</a></div>
+</div>
+<div class="cen2"><p>На английском языке: <a href="http://www.radiolocman.com/shem/schematics.html?di=148455" target="_blank">125 kHz RFID Tag Reader</a></p><p><i>Перевод: Vadim по заказу <a href="http://www.rlocman.ru/" target="_blank">РадиоЛоцман</a></i></p></div><div class="cen2"><p class="bo" style="text-align:right"><a href="http://www.rlocman.ru/newsletter/" class="br">Хотите получать уведомления о выходе новых материалов на сайте?<br>Подпишитесь на рассылку!</a></p></div><div class="t">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9426420834445326";
+google_ad_slot = "2422448488";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/show_ads.js">
+</script>
+</div>
+<div class="cen2"><a name="forum" id="forum"></a><table class="tborder" align="center" border="0" cellpadding="6" cellspacing="1" width="100%">
+<tbody><tr><td class="alt1" width="100%"><div class="u">
+Для комментирования материалов с сайта и получения полного доступа к нашему форуму Вам необходимо <a href="http://www.rlocman.ru/forum/register.php?s=" target="_blank"><b>зарегистрироваться</b></a>.</div></td><td class="alt2" style="padding:0px" nowrap="nowrap">
+<form action="/forum/login.php" method="post" onsubmit="md5hash(vb_login_password,vb_login_md5password,vb_login_md5password_utf)">
+<script type="text/javascript" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/vbulletin_md5.js"></script>
+
+<table border="0" cellpadding="0" cellspacing="3"><tbody><tr>
+<td class="smallfont">Имя</td>
+<td><input class="bginput" style="font-size: 11px" name="vb_login_username" id="navbar_username" size="18" accesskey="u" tabindex="101" value="Имя" onfocus="if (this.value == 'Имя') this.value = '';" type="text"></td>
+<td class="smallfont" colspan="2" nowrap="nowrap"><label for="cb_cookieuser_navbar"><input name="cookieuser" value="1" tabindex="103" id="cb_cookieuser_navbar" accesskey="c" type="checkbox">Запомнить?</label></td>
+</tr><tr>
+<td class="smallfont"><label for="navbar_password">Пароль</label></td>
+<td><input class="bginput" style="font-size: 11px" name="vb_login_password" id="navbar_password" size="18" tabindex="102" type="password"></td>
+<td><input class="button" value="Вход" tabindex="104" title="Введите ваше имя пользователя и пароль, чтобы войти, или нажмите кнопку 'Регистрация', чтобы зарегистрироваться." accesskey="s" type="submit">
+</td>
+</tr>
+</tbody></table>
+
+<input name="s" value="" type="hidden">
+<input name="do" value="login" type="hidden">		
+<input name="vb_login_md5password" type="hidden">
+<input name="vb_login_md5password_utf" type="hidden">
+</form>
+</td>
+</tr>
+</tbody></table>
+<table border="0" cellpadding="6" cellspacing="1" width="100%"><tbody><tr><td class="forum_1">Фрагменты обсуждения:</td><td align="right"><a href="http://www.rlocman.ru/forum/showthread.php?t=18510" class="forum_2">Полный вариант обсуждения »</a></td></tr></tbody></table>
+<ul class="forum_3"><li class="forum_4">Здравствуйте! Подскажите, 
+пожалуйста, как рассчитать напряжение на выходе операционного усилителя 
+второго (после транзисторногого ключа) в момент, когда транзистор открыт
+ и когда закрыт.</li></ul><table border="0" cellpadding="3" cellspacing="0" width="100%"><tbody><tr><td colspan="2" class="rl_news_t_sim">Рекомендуемые публикации по теме:</td></tr><tr valign="top"><td nowrap="nowrap"><table align="left" border="0" cellpadding="2" cellspacing="0" width="90"><tbody><tr><td align="center" bgcolor="#ffeb99" width="70"><a href="http://www.rlocman.ru/news/search.html" class="smru">Новости</a></td><td> &nbsp;<b><span class="br">»</span></b> </td></tr></tbody></table></td><td width="100%"><a href="http://www.rlocman.ru/news/new.html?di=112143">Atmel представляет первый в отрасли микроконтроллер со встроенным LF-RFID считывателем</a></td></tr><tr valign="top"><td nowrap="nowrap"><table align="left" border="0" cellpadding="2" cellspacing="0" width="90"><tbody><tr><td align="center" bgcolor="#ffeb99" width="70"><a href="http://www.rlocman.ru/news/search.html" class="smru">Новости</a></td><td> &nbsp;<b><span class="br">»</span></b> </td></tr></tbody></table></td><td width="100%"><a href="http://www.rlocman.ru/news/new.html?di=4706">Sagem представляет уличные биометрические считыватели со встроенными бесконтактным считывателем смарт-карт и базой данных</a></td></tr><tr valign="top"><td nowrap="nowrap"><table align="left" border="0" cellpadding="2" cellspacing="0" width="90"><tbody><tr><td align="center" bgcolor="#ffeb99" width="70"><a href="http://www.rlocman.ru/news/search.html" class="smru">Новости</a></td><td> &nbsp;<b><span class="br">»</span></b> </td></tr></tbody></table></td><td width="100%"><a href="http://www.rlocman.ru/news/new.html?di=4915">HID Corporation стала выпускать автономную система контроля доступа на базе считывателя-контроллера EntryProx</a></td></tr><tr valign="top"><td nowrap="nowrap"><table align="left" border="0" cellpadding="2" cellspacing="0" width="90"><tbody><tr><td align="center" bgcolor="#ffeb99" width="70"><a href="http://www.rlocman.ru/shem/search.html" class="smru">Схемы</a></td><td> &nbsp;<b><span class="br">»</span></b> </td></tr></tbody></table></td><td width="100%"><a href="http://www.rlocman.ru/shem/schematics.html?di=163111">Об управлении микроконтроллером AVR при дефиците выводов</a></td></tr><tr valign="top"><td nowrap="nowrap"><table align="left" border="0" cellpadding="2" cellspacing="0" width="90"><tbody><tr><td align="center" bgcolor="#ffeb99" width="70"><a href="http://www.rlocman.ru/news/search.html" class="smru">Новости</a></td><td> &nbsp;<b><span class="br">»</span></b> </td></tr></tbody></table></td><td width="100%"><a href="http://www.rlocman.ru/news/new.html?di=148644">Безбатарейный RFID-переключатель совместим с коммерческими считывателями EPC C1G2</a></td></tr></tbody></table><p></p><span class="up"><p align="right">При перепечатке материалов с сайта <b>прямая</b> ссылка на <a href="http://www.rlocman.ru/" class="up">РадиоЛоцман</a> обязательна.</p></span><span class="up"><p align="right">Приглашаем авторов статей и переводов к <a href="http://www.rlocman.ru/sot.html" class="up">публикации материалов</a> на страницах сайта.</p></span><p></p></div></td><td class="u" align="center" width="240">
+<div class="t"><div id="yandex_ad_R-1124-9"></div>
+<script type="text/javascript">
+    (function(w, n) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Context.AdvManager.render({
+                blockId: "R-1124-9",
+                renderTo: "yandex_ad_R-1124-9",
+                async: false
+            });
+        });
+        document.write('<sc'+'ript type="text/javascript" src="//an.yandex.ru/system/context.js"></sc'+'ript>');
+    })(this, "yandexContextSyncCallbacks");
+</script><script type="text/javascript" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/context.js"></script></div><table class="tab-right small">
+<tbody><tr>
+<td class="td-right0"><span class="red">С</span>резы &#8595;</td>
+</tr><tr>
+<td class="td-right">
+<b><ul class="ul-right">
+<li><a href="http://www.rlocman.ru/measure/" class="b"><span class="red">И</span>змерения</a></li>
+<li><a href="http://www.rlocman.ru/mcu/" class="b"><span class="red">М</span>икроконтроллеры</a></li>
+<li><a href="http://www.rlocman.ru/power/" class="b"><span class="red">С</span>иловая электроника</a></li>
+<li><a href="http://www.rlocman.ru/chip/" class="b"><span class="red">Э</span>лектронные компоненты</a></li>
+<li class="mt5"><a href="http://www.rlocman.ru/arduino/" class="b"><span class="red">A</span>rduino</a> <b class="red">New!</b></li>
+<li><a href="http://www.rlocman.ru/automation/" class="b"><span class="red">А</span>втоматизация</a></li>
+<li><a href="http://www.rlocman.ru/sec/" class="b"><span class="red">Б</span>езопасность</a></li>
+<li><a href="http://www.rlocman.ru/wireless/" class="b"><span class="red">Б</span>еспроводные технологии</a></li>
+<li><a href="http://www.rlocman.ru/wind/" class="b"><span class="red">В</span>етроэнергетика</a></li>
+<li><a href="http://www.rlocman.ru/instrument/" class="b"><span class="red">И</span>нструменты и технологии</a></li> 
+<li><a href="http://www.rlocman.ru/cad/" class="b"><span class="red">С</span>АПР и ПО</a></li>
+<li><a href="http://www.rlocman.ru/light/" class="b"><span class="red">С</span>ветотехника</a></li>
+<li><a href="http://www.rlocman.ru/sun/" class="b"><span class="red">С</span>олнечная энергетика</a></li>
+</ul></b>
+</td></tr></tbody></table>
+<table class="tab-right small">
+<tbody><tr>
+<td class="td-right">
+<ul class="ul-right">
+<li><a href="http://www.rlocman.ru/advert/" class="br"><b>Реклама на РЛ</b></a>
+<ul class="ul-right2">
+<li><a href="http://www.rlocman.ru/comp/rec.html" class="b">Размещение прайс листов</a></li>
+</ul>
+</li>
+<li><a href="http://www.rlocman.ru/newsletter/" class="br"><b>Подписка на обновления</b></a></li>
+<li><b>Журналы:</b>
+<ul class="ul-right2">
+<li><a href="http://www.rlocman.ru/magazine/" class="br"><b>РадиоЛоцман</b></a></li>
+<li><a href="http://www.rlocman.ru/radioyearbook/" class="br"><b>Радиоежегодник</b></a></li>
+</ul>
+</li>
+<li><a href="http://www.rlocman.ru/sot/author.html" class="br"><b>Авторам</b></a></li>
+<li><a href="http://www.rlocman.ru/sot.html" class="b">Сотрудничество</a></li>
+<li><a href="http://www.rlocman.ru/contacts.html" class="b">Контакты</a></li>
+<li><b>РЛ в социальных сетях:</b>
+</li></ul>
+<div style="text-align:center">
+<a href="http://vk.com/rlocman" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/vk.png" alt="радиолоцман вконтакте" height="32" border="0" width="32"></a>
+<a href="http://www.odnoklassniki.ru/rlocman" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/ok.gif" alt="радиолоцман одноклассники" height="32" border="0" width="32"></a>
+<a href="https://www.facebook.com/rlocman" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/fc.gif" alt="радиолоцман facebook" height="32" border="0" width="32"></a>
+<a href="https://twitter.com/rlocman" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/twitter.gif" alt="радиолоцман twitter" height="32" border="0" width="32"></a>
+<a href="https://plus.google.com/+RlocmanRuPlus" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/gp.gif" alt="радиолоцман google плюс" height="32" border="0" width="32"></a>
+</div>
+</td></tr></tbody></table>
+<div class="t"><style type="text/css">
+.adslot_1 { width: 240px; height: 480px; }
+</style>
+<script async="" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/adsbygoogle.js"></script>
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9426420834445326" data-ad-slot="5458266084" data-ad-format="vertical"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></td>
+</tr></tbody></table><table align="center" border="0" cellpadding="0" cellspacing="0" width="973"><tbody><tr><td style="text-align:left" class="cen">
+<div class="cen3">
+<div style="" class="relap-default-wrapper">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div data-column-quantity="4" data="ybWVflcBUfL3o42NUow:n_neOg:gQPvHeYP:V-9A8w:1:0:0:foF-Le0tfJNpV9PT:2:Aj9MIg:eyJyaSI6InZYSnpDbXdYcVEwMGJQc0JXUXoyQWJuaFFBcThDbXdMbkhWQ0RVZ2c5Z0VsdVZNSzhNQTNEVWx3Z3d3IiwiYWwiOjEsImZpIjozMjkwMTEwMSwiaW0iOjAsImdzIjoiUlUifQ:THxhvQ" class="relap-default__top-container js-relap__top-container 0 relap-default__with-brand relap-default_img-size-6 relap-default__widget-plain relap-default__block-title-font-family-arial relap-default__block-title-font-weight-400 relap-default__block-title-font-style-normal relap-default__float-none relap-default__title-font-family-arial relap-default__title-font-weight-400 relap-default__title-font-style-normal relap-default__description-font-family-arial relap-default__description-font-weight-400 relap-default__description-font-style-normal  relap-default-column-quantity-4" data-relap-max-column-quantity="4" data-relap-percent-font-size="7.85714285714%" data-relap-line-height="1.3" data-relap-max-lines="5" data-relap-px-min-font-size="14px">
+ 
+ 
+
+
+
+ 
+ 
+
+ 
+ <link rel="stylesheet" href="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/block.css">
+
+
+ 
+ 
+ <div class="relap-default__block-title" style="">Главное сегодня</div>
+
+ 
+ 
+ <div class="relap-default__items-container js-relap__items-container">
+
+ 
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="https://relap.io/r?r=JraVflcBaBzCnqz_zPQ%3APlKsDQ%3AeY_3AQ%3An_neOg%3AgQPvHeYP%3AV-9A8w%3AaHR0cDovL3J1c25ld3MuYml6L3BvbGl0aWNzL3ZuZXphcG5vZS12b2Vubm9lLXJlc2hlbmllLXB1dGluYS1vc2hhcmFzaGlsby1zc2hhLWktcG9sc2h1Lz91dG1fc291cmNlPXJlbGFwJnV0bV9tZWRpdW09Y3BjX3RlYXNlciZ1dG1fdGVybT1yZWxhcCZ1dG1fY29udGVudD0yNzA0Jl9fYWRyb29tX3ZhcmlhdGlvbl9pZF9fPWI1MGNhNjZjODQ3NTNhYjMzZGUzMWE5NzgzZjIxZGMy%3AAj9MIg%3AeyJhYyI6MjY5OSwidWciOiJSVSIsImdpZCI6MiwiYWxnIjo3NCwicG9zIjoxLCJyciI6MC43LCJpbSI6MCwiZ3MiOiJSVSIsIndpZCI6NTUwOCwicHIiOjAuM30%3AYo8j6Q&amp;_s=z3O14Q" data="JraVflcBaBzCnqz_zPQ:PlKsDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:aHR0cDovL3J1c25ld3MuYml6L3BvbGl0aWNzL3ZuZXphcG5vZS12b2Vubm9lLXJlc2hlbmllLXB1dGluYS1vc2hhcmFzaGlsby1zc2hhLWktcG9sc2h1Lz91dG1fc291cmNlPXJlbGFwJnV0bV9tZWRpdW09Y3BjX3RlYXNlciZ1dG1fdGVybT1yZWxhcCZ1dG1fY29udGVudD0yNzA0Jl9fYWRyb29tX3ZhcmlhdGlvbl9pZF9fPWI1MGNhNjZjODQ3NTNhYjMzZGUzMWE5NzgzZjIxZGMy:Aj9MIg:eyJhYyI6MjY5OSwidWciOiJSVSIsImdpZCI6MiwiYWxnIjo3NCwicG9zIjoxLCJyciI6MC43LCJpbSI6MCwiZ3MiOiJSVSIsIndpZCI6NTUwOCwicHIiOjAuM30:Yo8j6Q" data-position="1" data-onload-images="[]" data-onshow-images="[]" data-onclick-images="[]" data-ad-link="true" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Внезапное военное решение Путина ошарашило США и Польшу" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/PlKsDQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="https://relap.io/r?r=JraVflcBaBzCnqz_zPQ%3APlKsDQ%3AeY_3AQ%3An_neOg%3AgQPvHeYP%3AV-9A8w%3AaHR0cDovL3J1c25ld3MuYml6L3BvbGl0aWNzL3ZuZXphcG5vZS12b2Vubm9lLXJlc2hlbmllLXB1dGluYS1vc2hhcmFzaGlsby1zc2hhLWktcG9sc2h1Lz91dG1fc291cmNlPXJlbGFwJnV0bV9tZWRpdW09Y3BjX3RlYXNlciZ1dG1fdGVybT1yZWxhcCZ1dG1fY29udGVudD0yNzA0Jl9fYWRyb29tX3ZhcmlhdGlvbl9pZF9fPWI1MGNhNjZjODQ3NTNhYjMzZGUzMWE5NzgzZjIxZGMy%3AAj9MIg%3AeyJhYyI6MjY5OSwidWciOiJSVSIsImdpZCI6MiwiYWxnIjo3NCwicG9zIjoxLCJyciI6MC43LCJpbSI6MCwiZ3MiOiJSVSIsIndpZCI6NTUwOCwicHIiOjAuM30%3AYo8j6Q&amp;_s=z3O14Q" data="JraVflcBaBzCnqz_zPQ:PlKsDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:aHR0cDovL3J1c25ld3MuYml6L3BvbGl0aWNzL3ZuZXphcG5vZS12b2Vubm9lLXJlc2hlbmllLXB1dGluYS1vc2hhcmFzaGlsby1zc2hhLWktcG9sc2h1Lz91dG1fc291cmNlPXJlbGFwJnV0bV9tZWRpdW09Y3BjX3RlYXNlciZ1dG1fdGVybT1yZWxhcCZ1dG1fY29udGVudD0yNzA0Jl9fYWRyb29tX3ZhcmlhdGlvbl9pZF9fPWI1MGNhNjZjODQ3NTNhYjMzZGUzMWE5NzgzZjIxZGMy:Aj9MIg:eyJhYyI6MjY5OSwidWciOiJSVSIsImdpZCI6MiwiYWxnIjo3NCwicG9zIjoxLCJyciI6MC43LCJpbSI6MCwiZ3MiOiJSVSIsIndpZCI6NTUwOCwicHIiOjAuM30:Yo8j6Q" data-position="1" data-onload-images="[]" data-onshow-images="[]" data-onclick-images="[]" data-ad-link="true" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Внезапное</span><span> военное</span><span> решение</span><span> Путина</span><span> ошарашило</span><span> США</span><span> и</span><span> Польшу</span><span style="display: none;">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ <div class="relap-default__item__label">
+ 
+ Реклама
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=167883" data="J7aVflcBhRoZ17fsBGY:KfpyCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjIsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:KuSmHQ" data-position="2" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Инвертор 12/~220В 500 Вт с модифицированной синусоидой" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/KfpyCg.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=167883" data="J7aVflcBhRoZ17fsBGY:KfpyCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjIsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:KuSmHQ" data-position="2" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Инвертор</span><span> 12/~220В</span><span> 500</span><span> Вт</span><span> с</span><span> модифицированной</span><span style="display: none;"> синусоидой</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/news/new.html?di=182971" data="J7aVflcB0QR_pBOafcs:-J-oDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjMsImltIjowLCJncyI6IlJVIiwiZ2lkIjoyLCJ3aWQiOjU1MDh9:7QfUdQ" data-position="3" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Microchip выпускает отладочную платформу для 16- и 32-разрядных микроконтроллеров" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/-J-oDQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/news/new.html?di=182971" data="J7aVflcB0QR_pBOafcs:-J-oDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjMsImltIjowLCJncyI6IlJVIiwiZ2lkIjoyLCJ3aWQiOjU1MDh9:7QfUdQ" data-position="3" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Microchip</span><span> выпускает</span><span> отладочную</span><span> платформу</span><span> для</span><span> 16-</span><span> и</span><span style="display: none;"> 32-разрядных</span><span style="display: none;"> микроконтроллеров</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=40207" data="KLaVflcBMxDlYguI3Jg:oOT6AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjR9:GwsZyQ" data-position="4" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Как правильно выбрать напряжение управления затвором МОП-транзистора" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/oOT6AQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=40207" data="KLaVflcBMxDlYguI3Jg:oOT6AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjR9:GwsZyQ" data-position="4" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Как</span><span> правильно</span><span> выбрать</span><span> напряжение</span><span> управления</span><span> затвором</span><span style="display: none;"> МОП-транзистора</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=152453" data="KLaVflcBaHEhxChfOXA:zYT3AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjUsImltIjowLCJncyI6IlJVIiwid2lkIjo1NTA4LCJnaWQiOjJ9:CoWo1g" data-position="5" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Замена ламп фонаря мощными светодиодами" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/zYT3AQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=152453" data="KLaVflcBaHEhxChfOXA:zYT3AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjUsImltIjowLCJncyI6IlJVIiwid2lkIjo1NTA4LCJnaWQiOjJ9:CoWo1g" data-position="5" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Замена</span><span> ламп</span><span> фонаря</span><span> мощными</span><span> светодиодами</span><span style="display: none;">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/news/new.html?di=165149" data="KLaVflcBtUHnpw0ZAn0:LWlBCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjYsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:ovqtwA" data-position="6" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Сотрудничество STMicroelectronics и Arduino: отладочная плата на микроконтроллере серии STM32" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/LWlBCg.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/news/new.html?di=165149" data="KLaVflcBtUHnpw0ZAn0:LWlBCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjYsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:ovqtwA" data-position="6" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Сотрудничество</span><span> STMicroelectronics</span><span> и</span><span> Arduino</span><span>:</span><span> отладочная</span><span style="display: none;"> плата</span><span style="display: none;"> на</span><span style="display: none;"> микроконтроллере</span><span style="display: none;"> серии</span><span style="display: none;"> STM32</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=179993" data="KLaVflcBlPVrkDdIdgk:KIJtCw:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjcsIndpZCI6NTUwOCwiZ2lkIjoyLCJncyI6IlJVIiwiaW0iOjB9:pv-0aQ" data-position="7" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Универсальный прибор для проверки радиоэлементов из стрелочного тестера" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/KIJtCw.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=179993" data="KLaVflcBlPVrkDdIdgk:KIJtCw:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjcsIndpZCI6NTUwOCwiZ2lkIjoyLCJncyI6IlJVIiwiaW0iOjB9:pv-0aQ" data-position="7" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Универсальный</span><span> прибор</span><span> для</span><span> проверки</span><span> радиоэлементов</span><span> из</span><span style="display: none;"> стрелочного</span><span style="display: none;"> тестера</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=162667" data="KbaVflcBlZQc1Xup674:CP1DDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjgsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:EYx3DQ" data-position="8" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="До свидания, ATmega328! Здравствуй, ATmega328PB!" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/CP1DDQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=162667" data="KbaVflcBlZQc1Xup674:CP1DDQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjgsImdpZCI6Miwid2lkIjo1NTA4LCJncyI6IlJVIiwiaW0iOjB9:EYx3DQ" data-position="8" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>До</span><span> свидания</span><span>,</span><span> ATmega328</span><span>!</span><span> Здравствуй</span><span style="display: none;">,</span><span style="display: none;"> ATmega328PB</span><span style="display: none;">!</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=151943" data="KbaVflcBJnAyvDDlez4:3Kj3AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjl9:q2_KeA" data-position="9" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Простые схемы ШИМ генераторов на одной микросхеме" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/3Kj3AQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=151943" data="KbaVflcBJnAyvDDlez4:3Kj3AQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjl9:q2_KeA" data-position="9" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Простые</span><span> схемы</span><span> ШИМ</span><span> генераторов</span><span> на</span><span> одной</span><span> микросхеме</span><span style="display: none;">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=165253" data="KbaVflcBfRm7E41aEu0:sTFSCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjEwfQ:IUY5XQ" data-position="10" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Схемы, инструкции, статьи, документация, обзоры, тесты по профессиональной электронике" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/sTFSCg.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=165253" data="KbaVflcBfRm7E41aEu0:sTFSCg:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJ3aWQiOjU1MDgsImdpZCI6MiwiZ3MiOiJSVSIsImltIjowLCJwb3MiOjEwfQ:IUY5XQ" data-position="10" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Схемы</span><span>,</span><span> инструкции</span><span>,</span><span> статьи</span><span>,</span><span> документация</span><span>,</span><span> обзоры</span><span>,</span><span> тесты</span><span> по</span><span style="display: none;"> профессиональной</span><span style="display: none;"> электронике</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=182947" data="KbaVflcBkranFHuJ0B8:ZEg2DQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjExLCJpbSI6MCwiZ3MiOiJSVSIsImdpZCI6Miwid2lkIjo1NTA4fQ:gmmEcA" data-position="11" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Имитаторы аккумуляторов для проверки зарядных устройств" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/ZEg2DQ.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/shem/schematics.html?di=182947" data="KbaVflcBkranFHuJ0B8:ZEg2DQ:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjExLCJpbSI6MCwiZ3MiOiJSVSIsImdpZCI6Miwid2lkIjo1NTA4fQ:gmmEcA" data-position="11" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Имитаторы</span><span> аккумуляторов</span><span> для</span><span> проверки</span><span> зарядных</span><span style="display: none;"> устройств</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+<div class="js-relap__item relap-default__item relap-default__wide-inset-mode-adaptive ">
+ <div class="relap-default__item-inner">
+
+
+ 
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=182775" data="KraVflcB6CzUkBuX8g8:3fiCDA:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjEyLCJncyI6IlJVIiwiaW0iOjAsImdpZCI6Miwid2lkIjo1NTA4fQ:vx3XNg" data-position="12" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link relap-default__item-thumbnail js-relap__item-thumbnail">
+ <img title="Доработка 3D-принтера MC7 Prime mini от Мастер Кит - установка подогреваемого стола своими руками" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/3fiCDA.jpg" class="js-relap__item-thumbnail__img" data-img-resizer-ar-width="420" data-img-resizer-ar-height="320">
+ </a>
+ 
+ 
+ <div class="js-relap__item-title relap-default__item-title" style="font-size: 19.3286px;">
+ 
+ <a href="http://www.rlocman.ru/review/article.html?di=182775" data="KraVflcB6CzUkBuX8g8:3fiCDA:eY_3AQ:n_neOg:gQPvHeYP:V-9A8w:::eyJwb3MiOjEyLCJncyI6IlJVIiwiaW0iOjAsImdpZCI6Miwid2lkIjo1NTA4fQ:vx3XNg" data-position="12" data-onload-images="" data-onshow-images="" data-onclick-images="" target="_blank" class="js-relap__item-link relap-default__item-link">
+ <div class="js-relap__item-title-text relap-default__item-title-text"><span>Доработка</span><span> 3D-принтера</span><span> MC7</span><span> Prime</span><span> mini</span><span> от</span><span> Мастер</span><span style="display: none;"> Кит</span><span style="display: none;"> -</span><span style="display: none;"> установка</span><span style="display: none;"> подогреваемого</span><span style="display: none;"> стола</span><span style="display: none;"> своими</span><span style="display: none;"> руками</span><span style="">…</span></div>
+ </a>
+ 
+ </div>
+ 
+ 
+ 
+ 
+ 
+ 
+
+ </div>
+</div>
+
+
+
+ 
+ <div style="display: none;" class="js-relap__fake-item relap-default__fake-item">
+ </div>
+ 
+ <div style="display: none;" class="js-relap__fake-item relap-default__fake-item">
+ </div>
+ 
+ <div style="display: none;" class="js-relap__fake-item relap-default__fake-item">
+ </div>
+ 
+ <div style="display: none;" class="js-relap__fake-item relap-default__fake-item">
+ </div>
+ 
+ 
+ 
+ <a class="relap-default__logo js-relap__logo" href="https://relap.io/?utm_source=publishers&amp;utm_medium=widget&amp;utm_content=promo_link&amp;utm_campaign=From%20widget" target="_blank">
+ <span class="relap-default__logo__icon"><!--?xml version="1.0" encoding="utf-8"?-->
+
+<svg version="1.1" id="Relap_x5F_logo" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 50 14" style="enable-background:new 0 0 50 14;" xml:space="preserve" width="50px" height="16px">
+<style type="text/css">
+ .relap-logo-svg-icon{fill:#B2B2B2;}
+</style>
+<path class="relap-logo-svg-icon" d="M11.315,10.183c0,0.601-0.489,1.088-1.092,1.088c-0.5,0-0.904-0.342-1.034-0.799
+ H2.128L2.12,10.465c-0.127,0.461-0.53,0.807-1.032,0.807C0.487,11.272,0,10.784,0,10.183c0-0.5,0.344-0.903,0.803-1.031L0.802,9.151
+ V2.115C0.343,1.986,0,1.583,0,1.085c0-0.601,0.489-1.089,1.092-1.089c0.603,0,1.092,0.487,1.092,1.089
+ c0,0.498-0.343,0.901-0.801,1.03v6.612l2.54-6.109C3.549,2.324,3.386,1.821,3.577,1.361c0.231-0.555,0.87-0.819,1.427-0.589
+ c0.557,0.23,0.822,0.867,0.591,1.422C5.405,2.654,4.933,2.895,4.459,2.84L1.92,8.949l4.692-4.676C6.38,3.859,6.422,3.332,6.776,2.98
+ c0.426-0.425,1.118-0.425,1.544,0c0.427,0.425,0.427,1.114,0,1.539C7.967,4.872,7.439,4.915,7.023,4.683L2.331,9.359l6.131-2.531
+ C8.406,6.356,8.648,5.887,9.11,5.696c0.557-0.23,1.196,0.034,1.427,0.589c0.231,0.555-0.034,1.192-0.591,1.422
+ C9.484,7.898,8.98,7.736,8.684,7.363L2.553,9.894h6.636c0.129-0.457,0.533-0.799,1.034-0.799
+ C10.826,9.095,11.315,9.582,11.315,10.183z M19.704,6.254l2.45,4.69h-1.883L18.03,6.478h-2.032v4.467H14.4V0.344h4.115
+ c0.507,0,0.962,0.077,1.365,0.231c0.402,0.154,0.748,0.367,1.037,0.64c0.288,0.273,0.509,0.601,0.663,0.983
+ c0.154,0.382,0.231,0.797,0.231,1.244c0,0.764-0.203,1.382-0.608,1.854C20.797,5.766,20.297,6.086,19.704,6.254z M18.397,5.108
+ c0.54,0,0.978-0.143,1.312-0.431c0.335-0.288,0.503-0.695,0.503-1.221c0-0.526-0.168-0.935-0.503-1.228
+ c-0.334-0.293-0.772-0.439-1.312-0.439h-2.399v3.32H18.397z M50,7.163c0,0.288-0.007,0.581-0.022,0.878
+ c-0.015,0.298-0.053,0.588-0.113,0.871c-0.059,0.283-0.147,0.548-0.262,0.796c-0.114,0.248-0.266,0.467-0.455,0.655
+ c-0.209,0.208-0.473,0.372-0.792,0.491c-0.319,0.119-0.668,0.178-1.046,0.178c-0.408,0-0.772-0.062-1.09-0.186
+ c-0.319-0.124-0.618-0.35-0.897-0.677v3.826h-1.524V3.396h1.494V4.2c0.289-0.347,0.59-0.583,0.904-0.707
+ c0.314-0.124,0.68-0.186,1.098-0.186c0.378,0,0.73,0.06,1.054,0.179c0.324,0.119,0.59,0.283,0.799,0.491
+ c0.189,0.189,0.341,0.407,0.455,0.655c0.115,0.248,0.202,0.511,0.262,0.789c0.06,0.278,0.097,0.566,0.113,0.864
+ C49.993,6.582,50,6.875,50,7.163z M48.476,7.163c0-0.337-0.018-0.657-0.052-0.96c-0.035-0.303-0.107-0.568-0.217-0.797
+ c-0.11-0.228-0.269-0.41-0.478-0.543c-0.209-0.134-0.483-0.201-0.822-0.201c-0.349,0-0.625,0.067-0.829,0.201
+ c-0.204,0.134-0.364,0.315-0.478,0.543c-0.115,0.229-0.189,0.494-0.224,0.797c-0.035,0.303-0.053,0.623-0.053,0.96
+ c0,0.338,0.018,0.658,0.053,0.96c0.035,0.303,0.109,0.571,0.224,0.804c0.115,0.233,0.274,0.417,0.478,0.551
+ c0.204,0.134,0.48,0.201,0.829,0.201c0.339,0,0.613-0.067,0.822-0.201c0.209-0.134,0.368-0.318,0.478-0.551
+ c0.109-0.233,0.182-0.501,0.217-0.804C48.458,7.82,48.476,7.5,48.476,7.163z M33.103,9.425c-0.12-0.149-0.179-0.367-0.179-0.655
+ V0.344h-1.524V8.86c0,0.278,0.04,0.543,0.12,0.797c0.08,0.253,0.204,0.474,0.373,0.662c0.17,0.189,0.386,0.34,0.65,0.454
+ c0.264,0.114,0.575,0.171,0.934,0.171h0.941V9.649h-0.672C33.436,9.649,33.222,9.574,33.103,9.425z M29.365,5.465
+ c0.144,0.447,0.217,0.938,0.217,1.474v0.67h-4.916c0,0.655,0.164,1.171,0.493,1.549c0.329,0.377,0.807,0.566,1.435,0.566
+ c0.428,0,0.774-0.062,1.038-0.186c0.264-0.124,0.531-0.32,0.799-0.588l0.971,0.908c-0.2,0.199-0.396,0.37-0.59,0.514
+ c-0.195,0.144-0.404,0.266-0.628,0.365c-0.224,0.1-0.469,0.174-0.732,0.223c-0.264,0.05-0.56,0.075-0.889,0.075
+ c-0.478,0-0.924-0.067-1.337-0.201c-0.413-0.134-0.772-0.352-1.076-0.655c-0.304-0.303-0.546-0.702-0.724-1.199
+ c-0.179-0.496-0.269-1.102-0.269-1.816c0-1.231,0.291-2.181,0.874-2.851c0.583-0.67,1.362-1.005,2.339-1.005
+ c0.508,0,0.961,0.089,1.359,0.268c0.399,0.179,0.735,0.427,1.009,0.745C29.011,4.637,29.22,5.019,29.365,5.465z M28.072,6.567
+ c-0.011-0.23-0.028-0.417-0.053-0.563c-0.025-0.145-0.077-0.302-0.157-0.473c-0.12-0.29-0.309-0.522-0.568-0.697
+ c-0.259-0.175-0.568-0.263-0.926-0.263c-0.359,0-0.67,0.088-0.934,0.263c-0.264,0.175-0.456,0.408-0.575,0.697
+ c-0.08,0.17-0.129,0.328-0.149,0.473c-0.02,0.145-0.035,0.333-0.045,0.563H28.072z M41.84,5.897v5.047h-1.494v-0.685
+ c-0.279,0.278-0.568,0.477-0.867,0.596c-0.299,0.119-0.682,0.178-1.15,0.178c-0.478,0-0.879-0.057-1.203-0.17
+ c-0.324-0.114-0.6-0.285-0.83-0.512c-0.398-0.416-0.598-0.955-0.598-1.618c0-0.633,0.217-1.152,0.65-1.558
+ c0.434-0.406,1.089-0.608,1.965-0.608h2.003V6.027c0-0.48-0.127-0.837-0.381-1.072c-0.254-0.235-0.68-0.352-1.278-0.352
+ c-0.418,0-0.747,0.055-0.986,0.164c-0.239,0.109-0.463,0.298-0.672,0.566l-1.001-0.938c0.359-0.417,0.745-0.702,1.158-0.856
+ c0.413-0.154,0.934-0.231,1.561-0.231C40.799,3.306,41.84,4.17,41.84,5.897z M40.316,7.609h-1.778c-0.448,0-0.787,0.095-1.016,0.283
+ c-0.23,0.189-0.344,0.457-0.344,0.804c0,0.348,0.112,0.613,0.336,0.797c0.224,0.184,0.575,0.276,1.054,0.276
+ c0.289,0,0.548-0.022,0.777-0.067c0.229-0.045,0.443-0.166,0.642-0.365c0.219-0.218,0.329-0.59,0.329-1.117V7.609z"></path>
+</svg>
+</span>
+ </a>
+ 
+ 
+ </div>
+ 
+ <span class="relap-default__test-load"></span></div>
+
+</div><script src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/similar_pages.js" id="relap-sp_foF-Le0tfJNpV9PT"></script><script id="foF-Le0tfJNpV9PT">if (window.relap) window.relap.ar('foF-Le0tfJNpV9PT');</script>
+</div>
+</td></tr></tbody></table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="973"><tbody><tr valign="top"><td>
+</td></tr></tbody></table><table style="margin-top:20px" align="center" border="0" cellpadding="0" cellspacing="0" width="973"><tbody><tr valign="top"><td class="cen up">
+<div class="cen2">
+<noindex>
+<script language="JavaScript"><!--
+document.write('<a href="http://www.liveinternet.ru/click" '+
+'target=_blank><img src="http://counter.yadro.ru/hit?t44.6;r'+
+escape(document.referrer)+((typeof(screen)=='undefined')?'':
+';s'+screen.width+'*'+screen.height+'*'+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+';u'+escape(document.URL)+
+';i'+escape('Жж'+document.title.substring(0,80))+';'+Math.random()+
+'" border=0 width=31 height=31 title="liveinternet.ru"></a>')//--></script><a href="http://www.liveinternet.ru/click" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/hit.gif" title="liveinternet.ru" height="31" border="0" width="31"></a>
+<script language="JavaScript" type="text/javascript"><!--
+d=document;var a='';a+=';r='+escape(d.referrer)
+js=10//--></script><script language="JavaScript1.1" type="text/javascript"><!--
+a+=';j='+navigator.javaEnabled()
+js=11//--></script><script language="JavaScript1.2" type="text/javascript"><!--
+s=screen;a+=';s='+s.width+'*'+s.height
+a+=';d='+(s.colorDepth?s.colorDepth:s.pixelDepth)
+js=12//--></script><script language="JavaScript1.3" type="text/javascript"><!--
+js=13//--></script><script language="JavaScript" type="text/javascript"><!--
+d.write('<a href="http://top.mail.ru/jump?from=14081"'+
+' target="_top"><img src="http://d7.c3.b0.a0.top.mail.ru/counter'+
+'?id=14081;t=55;js='+js+a+';rand='+Math.random()+
+'" alt="Рейтинг@Mail.ru"'+' border="0" height="31" width="88"/><\/a>')
+if(11<js)d.write('<'+'!-- ')//--></script><a href="http://top.mail.ru/jump?from=14081" target="_top"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/counter.gif" alt="Рейтинг@Mail.ru" height="31" border="0" width="88"></a><!-- <noscript><a
+target="_top" href="http://top.mail.ru/jump?from=14081"><img
+src="http://d7.c3.b0.a0.top.mail.ru/counter?js=na;id=14081;t=55"
+border="0" height="31" width="88"
+alt="Рейтинг@Mail.ru"/></a></noscript><script language="JavaScript" type="text/javascript"><!--
+if(11<js)d.write('--'+'>')//-->
+<script id="top100Counter" type="text/javascript" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/top100.jcn"></script><a href="http://top100.rambler.ru/home?id=32847" target="_blank"><img src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/top100.gif" title="Rambler's Top100" alt="Rambler's Top100" border="0"></a>
+<noscript>
+<a href="http://top100.rambler.ru/navi/32847/"><img src="http://counter.rambler.ru/top100.cnt?32847" alt="Rambler's Top100" border="0" /></a>
+</noscript>
+<script async="" src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/J4dC5UMhN2yk"></script>
+</noindex>
+</div>
+</td></tr></tbody></table>
+
+<p></p>
+
+<script type="text/javascript"><!--
+var ya_cid=58233;
+//--></script>
+<script src="RFID%20%D1%81%D1%87%D0%B8%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%20%D0%BD%D0%B0%20%D0%BC%D0%B8%D0%BA%D1%80%D0%BE%D0%BA%D0%BE%D0%BD%D1%82%D1%80%D0%BE%D0%BB%D0%BB%D0%B5%D1%80%D0%B5%20ATtiny13_files/watch.js" type="text/javascript"></script>
+
+
+
+<iframe style="display: none;"></iframe></body></html>

@@ -1,0 +1,44 @@
+.tit {font-size:11pt; color:#CC0000}
+a.tit, a.tit:visited, a.tit:link {font-size:11pt; color:#CC0000}
+
+.n_1 {color:#0000ff}
+
+.n_mod, a.n_mod, a.n_mod:visited, a.n_mod:link {color:#006600}
+
+.se {margin-top:0.8em; font-size:10pt}
+.pb {font-size: 10pt}
+
+ol.res li, .res {margin-top:1em}
+
+.fs2pb2 {padding-bottom:0.2em;font-size:12pt}
+.pb2 {padding-bottom:0.2em;font-size:10pt}
+
+/* then delete - remove to .green */
+.g {color:#006600}
+
+.b, a.b, a.b:visited, a.b:link {color:#000000}
+
+.sr {background-color:#E8F0FF}
+div.bp_num {font-weight:bold; font-size:11pt}
+span.bp_act {background-color:#FFFFFF; color:#CC0000}
+
+.so {margin:0 0 10px 5px; font-size:10pt}
+.soa {margin:0 5px 0 5px;}
+.sob {margin:0 5px 0 5px; padding: 0 5px 2px 5px; background-color:#FFEB99}
+
+.bnul2 {margin-top:4px; margin-bottom:8px}
+
+.ul3 {margin-left:-12px}
+
+/*
+.cen1 {padding: 0 5px 0 0; width: 750px;}
+*/
+.cen1 {
+padding: 0 5px 0 0;
+width: 785px;
+}
+
+.red {color:#FF0000}
+.blue {color:#0000FF}
+
+.t_r {margin-top:6px; margin-bottom:5px}
