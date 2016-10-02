@@ -1,6 +1,6 @@
 OBJ = main.o Permutation.o
 
-CC = $(CROSS_COMPILE)gcc
+CC = $(CROSS_COMPILE)g++
 
 INCLUDE_PATH = -I.
 
