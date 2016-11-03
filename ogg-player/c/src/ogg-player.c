@@ -28,6 +28,12 @@ static ogg_packet packet;
 static GLuint frame_tex;
 
 
+static vertex_shader = \
+"void main(void)"
+"{"
+"   "
+"}"
+
 
 
 //void
@@ -235,6 +241,10 @@ void
 display()
 {
     TRACE_INFO("display...");
+
+
+//    const GLfloat color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+//    glClearBufferfv(GL_COLOR, 0, color);
 
 //    glClear(GL_COLOR_BUFFER_BIT);
 //    glColor3f(1.0, 1.0, 1.0);
@@ -474,10 +484,10 @@ unsigned char
 clamp(float x, int min, int max)
 {
     if (x > max)
-        x = max;
+        return (unsigned char) max;
 
     if (x < min)
-        x = min;
+        return (unsigned char) min;
 
     return (unsigned char) x;
 }

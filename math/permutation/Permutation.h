@@ -3,12 +3,13 @@
 class Permutation : public IPermutation
 {
 public:
-    Permutation(int n);
+    Permutation(int n, int k);
     ~Permutation();
 
     void next();
     void show();
     bool is_last();
+    void reset();
 
 private:
     bool is_leftmost_digit();

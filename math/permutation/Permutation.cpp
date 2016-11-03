@@ -6,17 +6,30 @@ using namespace std;
 
 #include <Permutation.h>
 
-Permutation::Permutation(int n)
+Permutation::Permutation(int n, int k)
 {
     _n = n;
-    _digit = _n - 1;
-    _is_last = false;
-    _combination = new int[_n];
+    _k = k;
+    _combination = new int[_k];
+
+    reset();
 }
 
 Permutation::~Permutation()
 {
     delete[] _combination;
+}
+
+void
+Permutation::reset()
+{
+    _digit = _n - 1;
+    _is_last = false;
+
+    for (int i = 0; i < _k; i++)
+        _combination[i] = 0;
+
+    next();
 }
 
 bool
@@ -40,7 +53,7 @@ Permutation::is_last_digit_combination()
 bool
 Permutation::is_all_digits_different()
 {
-    for (int i = 0; i < _n; i++)
+    for (int i = 0; i < _n - 1; i++)
         for (int j = i + 1; j < _n; j++)
             if (_combination[i] == _combination[j])
                 return false;

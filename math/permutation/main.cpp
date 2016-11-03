@@ -3,7 +3,7 @@
 int
 main(int argc, char** argv)
 {
-    Permutation p(4);
+    Permutation p(4, 4);
 
     while (p.is_last() == false)
     {
