@@ -9,7 +9,7 @@ TST_CFLAGS = -g -Wall
 CLI_OBJ = src/cli.o src/cli-lib.o src/common-lib.o
 CLI_BIN = build/cli
 
-SRV_OBJ = src/srv.o src/common-lib.o
+SRV_OBJ = src/srv.o src/srv-lib.o src/common-lib.o
 SRV_BIN = build/srv
 
 TST_SRC = $(wildcard tests/*.c)
@@ -18,7 +18,7 @@ TST_BIN = $(patsubst tests/%.c, tests/%,   $(TST_SRC))
 
 VPATH = src tests
 
-.PHONY: all clear tests
+.PHONY: all clean tests
 
 all: $(CLI_BIN) $(SRV_BIN) tests
 
@@ -38,5 +38,5 @@ tests/%.o: src/%.c
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(INCLUDE_DIR) -o $@ $^
 
-clear:
+clean:
 	rm -f $(CLI_OBJ) $(CLI_BIN) $(SRV_OBJ) $(SRV_BIN) $(TST_OBJ) $(TST_BIN)

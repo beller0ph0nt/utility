@@ -19,16 +19,6 @@ void fill_req(request_t* req, const char* token, const char* scope);
 void write_req(int sock, request_t* req);
 void clean_req(request_t* req);
 
-
-
-
-
-
-void new_string_from_buf(string_t* str, char* buf);
-void free_string(string_t* str);
-void free_resp(responce_t* resp);
-void send_check_token_scope_req(int sock, char* token, char* scope);
-void recv_check_token_scope_ans(int sock, responce_t* resp);
 int  create_cli_connection(char* host, int port);
 void close_cli_connection(int sock);
 

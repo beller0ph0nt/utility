@@ -9,6 +9,7 @@
 
 #include <proto.h>
 #include <trace.h>
+#include <srv-lib.h>
 #include <common-lib.h>
 
 void read_req_body(int sock, svc_request_body_t* body)
@@ -78,16 +79,13 @@ void write_resp(int sock, responce_t* resp)
     write(sock, &resp->body.ok.expires_in,    sizeof(int32_t));
 }
 
-
-
-
-
-
+/*
 void usage(char* app_name)
 {
     fprintf(stderr,"usage: %s <port_number>\n", app_name);
     exit(EXIT_FAILURE);
 }
+*/
 
 int main(int argc, char** argv)
 {
@@ -118,10 +116,6 @@ int main(int argc, char** argv)
     TRACE_DEBUG("listening...");
     listen(sock, 1);
 
-
-
-
-
     TRACE_DEBUG("accepting request...");
     struct sockaddr_in cli_addr;
     socklen_t sock_len = sizeof(cli_addr);
@@ -143,10 +137,6 @@ int main(int argc, char** argv)
     free(resp);
 
     close(newsock);
-
-
-
-
 
     close(sock);
 
