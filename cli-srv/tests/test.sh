@@ -1,6 +1,7 @@
 
 TMP_FILE=resp
 
+../build/srv 4444 &
 ./test_01 192.168.1.66 4444 abracadabra test > $TMP_FILE
 
 cmp -s $TMP_FILE ok_resp

@@ -1,4 +1,3 @@
-#include <poll.h>
 #include <netdb.h>
 #include <errno.h>
 #include <stdio.h>
@@ -55,12 +54,6 @@ void read_body(int sock, responce_body_t* body)
     TRACE_DEBUG("    return code: %d", body->ok.return_code);
     body_reader[body->ok.return_code & CUBE_OAUTH2_ERR_MASK](sock, body);
 }
-
-
-
-
-
-
 
 void ok_body_cleaner(responce_body_t* body)
 {
@@ -164,48 +157,6 @@ void clean_req(request_t* req)
     clean_string(&req->body.token);
     clean_string(&req->body.scope);
 }
-
-/*
-#define BAD_ATTEMPT_COUNT  3
-#define WAIT_TIMEOUT       3000
-
-int recv_buffer(int fd, void* buf, int len)
-{
-    int attempt    = BAD_ATTEMPT_COUNT;
-    int remain_len = len;
-    int readed_len = 0;
-
-    struct pollfd fds;
-    fds.fd     = fd;
-    fds.events = POLLIN;
-
-    printf("reading...\n");
-
-    do
-    {
-        printf("    attempt #%d remain: %d readed: %d\n",
-               attempt, remain_len, readed_len);
-        if (poll(&fds, 1, WAIT_TIMEOUT) > 0)
-        {
-            int r = read(fd, buf + readed_len, remain_len);
-            if (r > 0)
-            {
-                readed_len += r;
-                remain_len -= r;
-            }
-            else
-                attempt--;
-        }
-        else
-            attempt--;
-    } while (attempt > 0 && remain_len != 0);
-
-    if (readed_len != len)
-        return -1;
-
-    return 0;
-}
-*/
 
 int create_cli_connection(char* host, int port)
 {

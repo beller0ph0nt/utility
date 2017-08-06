@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -7,10 +8,15 @@
 
 #include <netinet/in.h>
 
-#include <proto.h>
 #include <trace.h>
 #include <srv-lib.h>
 #include <common-lib.h>
+
+void usage(char* app_name)
+{
+    fprintf(stderr,"usage: %s <port_number>\n", app_name);
+    exit(EXIT_FAILURE);
+}
 
 void read_req_body(int sock, svc_request_body_t* body)
 {
@@ -54,18 +60,6 @@ void fill_resp(responce_t* resp)
     resp->header.request_id = 13;
 }
 
-void clean_resp(responce_t* resp)
-{
-    TRACE_DEBUG("clean responce");
-    memset(&resp->header, 0, sizeof(header_t));
-
-    resp->body.ok.return_code = 0;
-    clean_string(&resp->body.ok.client_id);
-    resp->body.ok.client_type = 0;
-    clean_string(&resp->body.ok.username);
-    resp->body.ok.expires_in = 0;
-}
-
 void write_resp(int sock, responce_t* resp)
 {
     TRACE_DEBUG("write responce");
@@ -79,26 +73,25 @@ void write_resp(int sock, responce_t* resp)
     write(sock, &resp->body.ok.expires_in,    sizeof(int32_t));
 }
 
-/*
-void usage(char* app_name)
+void clean_resp(responce_t* resp)
 {
-    fprintf(stderr,"usage: %s <port_number>\n", app_name);
-    exit(EXIT_FAILURE);
+    TRACE_DEBUG("clean responce");
+    memset(&resp->header, 0, sizeof(header_t));
+
+    resp->body.ok.return_code = 0;
+    clean_string(&resp->body.ok.client_id);
+    resp->body.ok.client_type = 0;
+    clean_string(&resp->body.ok.username);
+    resp->body.ok.expires_in = 0;
 }
-*/
 
-int main(int argc, char** argv)
+int create_srv_connection(int port)
 {
-    if (argc < 2)
-        usage(argv[0]);
-
-    int port = atoi(argv[1]);
-
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (socket < 0)
     {
         TRACE_ERROR("socket() failed: %s", strerror(errno));
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
     struct sockaddr_in serv_addr;
@@ -110,12 +103,17 @@ int main(int argc, char** argv)
     if (bind(sock, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
     {
         TRACE_ERROR("bind() failed: %s", strerror(errno));
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
     TRACE_DEBUG("listening...");
     listen(sock, 1);
 
+    return sock;
+}
+
+int accept_req(int sock)
+{
     TRACE_DEBUG("accepting request...");
     struct sockaddr_in cli_addr;
     socklen_t sock_len = sizeof(cli_addr);
@@ -123,22 +121,8 @@ int main(int argc, char** argv)
     if (newsock < 0)
     {
         TRACE_ERROR("accept() failed: %s", strerror(errno));
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
 
-    request_t* req = malloc(sizeof(request_t));
-    read_req(newsock, req);
-    free(req);
-
-    responce_t* resp = malloc(sizeof(responce_t));
-    fill_resp(resp);
-    write_resp(newsock, resp);
-    clean_resp(resp);
-    free(resp);
-
-    close(newsock);
-
-    close(sock);
-
-    return 0;
+    return newsock;
 }
