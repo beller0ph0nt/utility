@@ -193,5 +193,6 @@ int create_cli_connection(char* host, int port)
 void close_cli_connection(int sock)
 {
     TRACE_DEBUG("close client connection");
+    shutdown(sock, SHUT_RDWR);
     close(sock);
 }
